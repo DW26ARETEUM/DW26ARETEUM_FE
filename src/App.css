@@ -1,3 +1,75 @@
-.app-shell {
-  min-height: 100vh;
+.pc-background {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-outer);
+  overflow: hidden;
+}
+
+.mobile-frame {
+  width: 100%;
+  max-width: 430px;
+  height: 100vh;
+  max-height: 880px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+  border-radius: 20px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+}
+
+.mobile-content {
+  flex: 1;
+  overflow-y: auto;
+  cursor: grab;
+  user-select: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.mobile-content:active {
+  cursor: grabbing;
+}
+
+.mobile-content::-webkit-scrollbar {
+  display: none;
+}
+
+.app-content {
+  min-height: 100%;
+  padding: 32px 20px;
+  background: linear-gradient(
+    180deg,
+    var(--surface) 0%,
+    var(--surface-strong) 100%
+  );
+}
+
+.app-content h1 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.1;
+}
+
+.pixel-art {
+  image-rendering: pixelated;
+}
+
+@media (max-width: 480px) {
+  .pc-background {
+    background: var(--surface);
+  }
+
+  .mobile-frame {
+    max-width: none;
+    max-height: none;
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+  }
 }
