@@ -1,0 +1,24 @@
+/* 폰트 정의 */
+@font-face {
+  font-family: "Galmuri9";
+  src: url("./assets/Galmuri9.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* 전체 웹페이지 기본 스타일 지정 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    "Galmuri9",
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    sans-serif;
+}
