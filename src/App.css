@@ -10,9 +10,9 @@
 
 .mobile-frame {
   width: 100%;
-  max-width: 430px;
+  max-width: 393px;
   height: 100vh;
-  max-height: 880px;
+  max-height: 852px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -41,7 +41,6 @@
 
 .app-content {
   min-height: 100%;
-  padding: 32px 20px;
   background: linear-gradient(
     180deg,
     var(--surface) 0%,
@@ -49,18 +48,11 @@
   );
 }
 
-.app-content h1 {
-  margin: 0;
-  color: var(--text);
-  font-size: clamp(2rem, 5vw, 3rem);
-  line-height: 1.1;
-}
-
 .pixel-art {
   image-rendering: pixelated;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 393px) {
   .pc-background {
     background: var(--surface);
   }
