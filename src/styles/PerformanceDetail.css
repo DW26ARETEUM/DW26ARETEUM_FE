@@ -114,6 +114,7 @@
     sans-serif;
   letter-spacing: -0.36px;
   overflow-wrap: break-word;
+  white-space: pre-line;
 }
 
 .performance-detail__photo {

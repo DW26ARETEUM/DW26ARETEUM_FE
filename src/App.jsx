@@ -3,8 +3,8 @@ import PerformanceDetail from "./pages/PerformanceDetail.jsx";
 
 function App() {
   // 테스트할 날짜(29 또는 30)와 공연 순서(0~7)를 변경하여 테스트
-  const previewDay = 30;
-  const previewIndex = 5;
+  const previewDay = 29;
+  const previewIndex = 6;
 
   return (
     <div className="pc-background">

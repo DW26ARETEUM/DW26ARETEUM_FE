@@ -17,6 +17,8 @@ const imageFiles = import.meta.glob(
 );
 
 // 현재는 화면 확인용 데이터입니다. 공연타임테이블과 같은 순서입니다.
+// 수정: 피그마와 제목이 다른 공연에는 displayTitle을 추가했습니다.
+// 수정: 전유진과 박기영에는 상단 표시용 categoryLabel을 추가했습니다.
 // TODO(백엔드 완료 후): 제목·날짜·시간·분류·출연자·장소를 상세 API 응답으로 교체합니다.
 // TODO(백엔드 완료 후): imageFile만 별도 매핑으로 옮깁니다. ID가 안정적으로 유지되는지 확인한 뒤 ID 기준 매핑을 결정합니다.
 const previewPerformances = {
@@ -47,6 +49,7 @@ const previewPerformances = {
     },
     {
       title: "합정동 평화유지연합회",
+      displayTitle: "합정동\n평화유지연합회",
       startTime: "19:08",
       endTime: "19:25",
       category: "EVENT",
@@ -58,11 +61,13 @@ const previewPerformances = {
       startTime: "19:30",
       endTime: "19:50",
       category: "ARTIST",
+      categoryLabel: "스페셜 스테이지",
       performer: "스페셜 스테이지_전유진",
       imageFile: "29-jeon-yujin.png",
     },
     {
       title: "세이마이네임",
+      displayTitle: "SAY MY NAME\n세이마이네임",
       startTime: "20:00",
       endTime: "20:30",
       category: "ARTIST",
@@ -71,6 +76,7 @@ const previewPerformances = {
     },
     {
       title: "이즈나",
+      displayTitle: "izna\n이즈나",
       startTime: "20:35",
       endTime: "21:05",
       category: "ARTIST",
@@ -79,6 +85,7 @@ const previewPerformances = {
     },
     {
       title: "윤하",
+      displayTitle: "Younha\n윤하",
       startTime: "21:10",
       endTime: "21:50",
       category: "ARTIST",
@@ -124,11 +131,13 @@ const previewPerformances = {
       startTime: "19:30",
       endTime: "19:50",
       category: "ARTIST",
+      categoryLabel: "스페셜 스테이지",
       performer: "스페셜 스테이지_박기영",
       imageFile: "30-park-kiyoung.png",
     },
     {
       title: "체리필터",
+      displayTitle: "CherryFilter\n체리필터",
       startTime: "20:05",
       endTime: "20:40",
       category: "ARTIST",
@@ -137,6 +146,7 @@ const previewPerformances = {
     },
     {
       title: "청하",
+      displayTitle: "CHUNG HA\n청하",
       startTime: "20:45",
       endTime: "21:20",
       category: "ARTIST",
@@ -145,6 +155,7 @@ const previewPerformances = {
     },
     {
       title: "스테이씨",
+      displayTitle: "STAYC\n스테이씨",
       startTime: "21:25",
       endTime: "22:00",
       category: "ARTIST",
@@ -232,9 +243,10 @@ export default function PerformanceDetail({
 
             <div className="performance-detail__heading">
               <p className="performance-detail__category">
-                {categoryLabels[performance.category]}
+                {performance.categoryLabel ||
+                  categoryLabels[performance.category]}
               </p>
-              <h2>{performance.title}</h2>
+              <h2>{performance.displayTitle || performance.title}</h2>
             </div>
 
             {image && (
