@@ -25,14 +25,8 @@
 .mobile-content {
   flex: 1;
   overflow-y: auto;
-  cursor: grab;
-  user-select: none;
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-.mobile-content:active {
-  cursor: grabbing;
 }
 
 .mobile-content::-webkit-scrollbar {
@@ -41,11 +35,7 @@
 
 .app-content {
   min-height: 100%;
-  background: linear-gradient(
-    180deg,
-    var(--surface) 0%,
-    var(--surface-strong) 100%
-  );
+  background: var(--surface);
 }
 
 .pixel-art {
