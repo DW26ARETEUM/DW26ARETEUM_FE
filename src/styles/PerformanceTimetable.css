@@ -1,0 +1,308 @@
+@font-face {
+  font-family: Galmuri9;
+  src: url("../assets/Galmuri9.woff2") format("woff2");
+  font-display: swap;
+}
+
+.performance-timetable {
+  position: relative;
+  width: 393px;
+  height: 1991px;
+  flex: none;
+  overflow: hidden;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  font-family: Galmuri9, sans-serif;
+}
+
+.performance-timetable * {
+  box-sizing: border-box;
+}
+
+.performance-timetable__header {
+  position: absolute;
+  z-index: 2;
+  inset: 61px 0 auto;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.performance-timetable__header h1 {
+  margin: 0;
+  color: #111;
+  font:
+    400 20px/150% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.5px;
+  text-align: center;
+}
+
+.performance-timetable__nav {
+  position: absolute;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.performance-timetable__nav img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.performance-timetable__nav--back {
+  left: 16px;
+}
+
+.performance-timetable__nav--home {
+  right: 16px;
+  padding: 0;
+}
+
+.performance-timetable__days {
+  position: absolute;
+  z-index: 2;
+  top: 115px;
+  left: 0;
+  width: 100%;
+}
+
+.performance-timetable__day {
+  position: absolute;
+  width: 105px;
+  height: 83px;
+  border: 0;
+  padding: 0 0 4px;
+  background: center / contain no-repeat;
+  color: #111;
+  font:
+    400 16px/150% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.32px;
+  cursor: pointer;
+}
+
+.performance-timetable__day--29 {
+  left: 78px;
+}
+
+.performance-timetable__day--30 {
+  left: 207px;
+}
+
+.performance-timetable__decorations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.performance-timetable__line,
+.performance-timetable__sparkle {
+  position: absolute;
+  display: block;
+  object-fit: fill;
+}
+
+.performance-timetable__line {
+  width: 199px;
+  height: 159px;
+}
+
+.performance-timetable__line--1 {
+  left: 103px;
+  top: 351px;
+}
+
+.performance-timetable__line--2 {
+  left: 105px;
+  top: 540px;
+}
+
+.performance-timetable__line--3 {
+  left: 111px;
+  top: 754px;
+}
+
+.performance-timetable__line--4 {
+  left: 83px;
+  top: 937px;
+}
+
+.performance-timetable__line--5 {
+  left: 81px;
+  top: 1130px;
+}
+
+.performance-timetable__line--6 {
+  left: 117px;
+  top: 1313px;
+}
+
+.performance-timetable__line--7 {
+  left: 120px;
+  top: 1509px;
+}
+
+.performance-timetable__sparkle--1 {
+  left: 53px;
+  top: 273px;
+  width: 79px;
+  height: 93px;
+}
+
+.performance-timetable__sparkle--2 {
+  left: 299px;
+  top: 485px;
+  width: 64px;
+  height: 75px;
+}
+
+.performance-timetable__sparkle--3 {
+  left: 57px;
+  top: 680px;
+  width: 71px;
+  height: 84px;
+}
+
+.performance-timetable__sparkle--4 {
+  left: 266px;
+  top: 853px;
+  width: 83px;
+  height: 98px;
+}
+
+.performance-timetable__sparkle--5 {
+  left: 38px;
+  top: 1070px;
+  width: 57px;
+  height: 67px;
+}
+
+.performance-timetable__sparkle--6 {
+  left: 285px;
+  top: 1252px;
+  width: 57px;
+  height: 67px;
+}
+
+.performance-timetable__sparkle--7 {
+  left: 48px;
+  top: 1441px;
+  width: 79px;
+  height: 93px;
+}
+
+.performance-timetable__sparkle--8 {
+  left: 297px;
+  top: 1637px;
+  width: 64px;
+  height: 75px;
+}
+
+.performance-timetable__performances {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+.performance-timetable__performance {
+  position: absolute;
+  z-index: 1;
+  width: 245px;
+  display: flex;
+  flex-direction: column;
+  color: #fff3d8;
+  text-shadow: 1px 2px 7px rgba(255, 232, 61, 0.49);
+}
+
+.performance-timetable__performance:nth-child(n + 3):nth-child(-n + 6) {
+  text-shadow: 1px 2px 7px rgba(255, 0, 161, 0.69);
+}
+
+.performance-timetable__performance:nth-child(odd) {
+  left: 133px;
+  text-align: left;
+}
+
+.performance-timetable__performance:nth-child(even) {
+  right: 105px;
+  text-align: right;
+}
+
+.performance-timetable__performance.performance-timetable__performance--4 {
+  right: 133px;
+}
+
+.performance-timetable__performance--1 {
+  top: 288px;
+}
+
+.performance-timetable__performance--2 {
+  top: 495px;
+}
+
+.performance-timetable__performance--3 {
+  top: 689px;
+}
+
+.performance-timetable__performance--4 {
+  top: 881px;
+}
+
+.performance-timetable__performance--5 {
+  top: 1072px;
+}
+
+.performance-timetable__performance--6 {
+  top: 1256px;
+}
+
+.performance-timetable__performance--7 {
+  top: 1450px;
+}
+
+.performance-timetable__performance--8 {
+  top: 1639px;
+}
+
+.performance-timetable__time {
+  font:
+    400 20px/150% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.4px;
+  white-space: nowrap;
+}
+
+.performance-timetable__name {
+  font:
+    400 20px/150% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.4px;
+  white-space: nowrap;
+}
+
+.performance-timetable__logo {
+  position: absolute;
+  left: 45px;
+  top: 1718px;
+  width: 303.192px;
+  height: 127px;
+}
+
+.performance-timetable__skyline {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 393px;
+  height: auto;
+}
