@@ -10,7 +10,7 @@ function App() {
       <div className="mobile-frame">
         <div className="mobile-content">
           <div className="app-content">
-            <Home />
+            <FoodTruckDetail />
           </div>
         </div>
       </div>
