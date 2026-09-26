@@ -2,6 +2,7 @@ import "./styles/App.css";
 import PerformanceTimetable from "./pages/PerformanceTimetable.jsx";
 import PerformanceDetail from "./pages/PerformanceDetail.jsx";
 import FoodTruckDetail from "./pages/FoodTruckDetail.jsx";
+import Home from "./pages/home.jsx";
 
 function App() {
   return (
@@ -9,7 +10,7 @@ function App() {
       <div className="mobile-frame">
         <div className="mobile-content">
           <div className="app-content">
-            <FoodTruckDetail />
+            <Home />
           </div>
         </div>
       </div>
