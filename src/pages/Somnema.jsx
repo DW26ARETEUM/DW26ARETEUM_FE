@@ -2,10 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/BoothDetailLayout.css";
 import "../styles/Somnema.css";
-import background from "../assets/images/background/home.png";
+import background from "../assets/images/background/boothMapBackground.png";
 import popup from "../assets/images/boothDetail.png";
 import backButton from "../assets/images/backbtn.svg";
+import titleLogo from "../assets/images/pinkTitle.png";
+import footerImage from "../assets/images/somnema/dwu.png";
 import SomnemaTabs from "../components/somnema/SomnemaTabs.jsx";
+import SomnemaIntro from "../components/somnema/SomnemaIntro.jsx";
 import { SOMNEMA_TABS } from "../constants/somnema.js";
 
 export default function Somnema() {
@@ -15,6 +18,19 @@ export default function Somnema() {
   const selectedLabel = SOMNEMA_TABS.find(
     ({ value }) => value === selectedTab,
   )?.label;
+
+  // 선택된 탭에 맞는 내용 보여주기
+  const renderPanel = () => {
+    switch (selectedTab) {
+      case "intro":
+        return <SomnemaIntro />;
+      default:
+        // 아직 안 만듦
+        return (
+          <p className="somnema-page__placeholder">{selectedLabel} 준비 중</p>
+        );
+    }
+  };
 
   return (
     <main
@@ -44,9 +60,20 @@ export default function Somnema() {
           role="tabpanel"
           aria-labelledby={`somnema-tab-${selectedTab}`}
         >
-          {/* 탭별 내용은 다음 단계에서 채울 예정 */}
-          <p>{selectedLabel} 준비 중</p>
+          <div className="somnema-page__fade" aria-hidden="true" />
+
+          <div className="somnema-page__content">{renderPanel()}</div>
+
+          <img
+            className="somnema-page__logo"
+            src={titleLogo}
+            alt="S*m Thing in the Night"
+          />
         </section>
+
+        <footer className="somnema-page__footer">
+          <img src={footerImage} alt="동덕여자대학교" />
+        </footer>
       </div>
     </main>
   );
