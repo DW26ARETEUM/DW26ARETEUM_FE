@@ -1,0 +1,114 @@
+.home {
+  /* ⭐️ 높이를 최소 100% (또는 100vh)로 설정해서 0px이 안 되게 만듭니다 */
+  width: 100%;
+  height: 100%;
+  min-height: 100vh; /* 부모 요소 크기에 맞춰 유동적으로 100% 또는 100vh 적용 */
+
+  /* 배경은 여백 없이 꽉 채움 */
+  background-image: url("../assets/images/background/home.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* ⭐️ "이 박스를 cqw 단위의 기준점으로 삼겠다"고 선언 */
+  container-type: inline-size;
+}
+
+/* 상단 타이틀 로고 스타일 */
+.home-logo {
+  position: absolute;
+  top: 10%; /* 상단 여백 (피그마 보면서 조절) */
+  left: 50%;
+  transform: translateX(-50%); /* 가로 가운데 정렬 */
+  width: 75%; /* 화면 너비의 75% 크기로 설정 (절대 안 잘림) */
+  max-width: 300px;
+  height: auto;
+}
+
+/* 구름 버튼 레이어 */
+.menu-container {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 공통 구름 버튼 */
+.cloud-btn {
+  position: absolute;
+  background-image: url("../assets/images/home/cloudBtn.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+
+  border: none;
+  cursor: pointer;
+
+  color: #000;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 27px */
+  letter-spacing: -0.36px;
+
+  padding-top: 2cqw;
+
+  transition: transform 0.05s ease-in-out;
+}
+
+.cloud-btn:active {
+  transform: translateY(3px); /* 3px 아래로 눌림 */
+  filter: brightness(0.92); /* 버튼 색상이 살짝 어두워져 눌린 감각 전달 */
+}
+
+/* 구름 위치 (%) */
+.booth-info {
+  width: 37cqw;
+  height: 19.25cqw;
+
+  top: 30%;
+  left: 12%;
+}
+
+.booth-map {
+  width: 46.46cqw;
+  height: 24.17cqw;
+
+  top: 36%;
+  left: 45%;
+}
+
+.timetable {
+  width: 36.64cqw;
+  height: 20.14cqw;
+
+  top: 47%;
+  left: 9%;
+}
+
+.somnema {
+  width: 34.45cqw;
+  height: 17.92cqw;
+
+  top: 53.5%;
+  left: 52%;
+}
+
+.som-talk {
+  width: 32.42cqw;
+  height: 16.87cqw;
+
+  top: 63%;
+  left: 20%;
+}
+
+.credits {
+  width: 29.48cqw;
+  height: 15.34cqw;
+
+  font-size: 4cqw;
+  top: 70%;
+  left: 53%;
+}
