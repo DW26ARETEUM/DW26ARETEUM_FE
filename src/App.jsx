@@ -8,6 +8,7 @@ import Home from "./pages/Home.jsx";
 import SomCollectionDetail from "./pages/SomCollectionDetail.jsx";
 import FestivalBoothDetail from "./pages/FestivalBoothDetail.jsx";
 import BarDetail from "./pages/BarDetail.jsx";
+import GeneralBoothDetail from "./pages/GeneralBoothDetail.jsx";
 import Timetable from "./pages/Timetable.jsx";
 
 function App() {
@@ -18,7 +19,15 @@ function App() {
           <div className="app-content">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/foodtruck" element={<FoodTruckDetail />} />
+              <Route path="/foodtruck/detail" element={<FoodTruckDetail />} />
+              <Route
+                path="/performance/timetable"
+                element={<PerformanceTimetable />}
+              />
+              <Route
+                path="/performance/:day/:index"
+                element={<PerformanceDetail />}
+              />
               <Route
                 path="/booth/som-collection/:day/:boothId"
                 element={<SomCollectionDetail />}
@@ -28,6 +37,10 @@ function App() {
                 element={<FestivalBoothDetail />}
               />
               <Route path="/booth/bar/:day/:boothId" element={<BarDetail />} />
+              <Route
+                path="/booth/general/:day/:boothId"
+                element={<GeneralBoothDetail />}
+              />
               <Route path="/timetable" element={<Timetable />} />
             </Routes>
           </div>
