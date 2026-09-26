@@ -1,0 +1,31 @@
+.som-collection-items {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.som-collection-items__item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: calc(var(--u) * 8);
+  font-size: calc(var(--u) * 11);
+  line-height: 1.8;
+  letter-spacing: -0.02em;
+}
+
+.som-collection-items__name {
+  min-width: 0;
+  color: var(--booth-text);
+  overflow-wrap: anywhere;
+}
+
+.som-collection-items__price {
+  flex: none;
+  color: var(--booth-accent);
+  text-align: right;
+  white-space: nowrap;
+}
