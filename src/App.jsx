@@ -10,6 +10,7 @@ import FestivalBoothDetail from "./pages/FestivalBoothDetail.jsx";
 import BarDetail from "./pages/BarDetail.jsx";
 import GeneralBoothDetail from "./pages/GeneralBoothDetail.jsx";
 import BoothMap from "./pages/BoothMap.jsx";
+import Somnema from "./pages/Somnema.jsx";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
                 element={<GeneralBoothDetail />}
               />
               <Route path="/booth-map" element={<BoothMap />}></Route>
+              <Route path="/somnema" element={<Somnema />} />
             </Routes>
           </div>
         </div>

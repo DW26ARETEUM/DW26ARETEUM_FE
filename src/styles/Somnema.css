@@ -1,0 +1,64 @@
+/* ===== 탭 ===== */
+
+/* 탭 줄 (피그마 기준 345 x 46, 옆으로 스크롤) */
+.somnema-tabs {
+  position: relative;
+  display: flex;
+  gap: calc(var(--u) * 4);
+  width: calc(var(--u) * 345);
+  height: calc(var(--u) * 46);
+  margin-left: calc(var(--u) * 24);
+  padding-top: calc(var(--u) * 5);
+  overflow-x: auto;
+  scrollbar-width: none; /* 스크롤바 숨기기 (파이어폭스) */
+}
+
+/* 스크롤바 숨기기 (크롬, 사파리) */
+.somnema-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+/* 탭 버튼 1개 */
+.somnema-tabs__tab {
+  flex: none;
+  width: calc(var(--u) * var(--tab-width));
+  height: calc(var(--u) * 36);
+  padding: 0;
+
+  /* 9분할: 양쪽 둥근 모서리는 유지하고 가운데만 늘리기 */
+  border-style: solid;
+  border-width: 0 calc(var(--u) * 10);
+  border-image-slice: 0 40 fill;
+  border-image-repeat: stretch;
+
+  background: none;
+  image-rendering: pixelated;
+  color: var(--booth-text);
+  font-family: inherit;
+  font-size: calc(var(--u) * 13);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* 선택된 탭은 흰 글씨 */
+.somnema-tabs__tab--selected {
+  color: #fff;
+}
+
+/* ===== 카드 ===== */
+
+/* 분홍 창문 카드 (피그마 기준 342 x 654) */
+.somnema-page__popup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(var(--u) * 342);
+  height: calc(var(--u) * 654);
+  margin: calc(var(--u) * 6) 0 0 calc(var(--u) * 25);
+  padding-top: calc(var(--u) * 56);
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
