@@ -5,6 +5,7 @@ import PerformanceDetail from "./pages/PerformanceDetail.jsx";
 import FoodTruckDetail from "./pages/FoodTruckDetail.jsx";
 import SomCollectionDetail from "./pages/SomCollectionDetail.jsx";
 import FestivalBoothDetail from "./pages/FestivalBoothDetail.jsx";
+import BarDetail from "./pages/BarDetail.jsx";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
                 path="/booth/festival/:boothId"
                 element={<FestivalBoothDetail />}
               />
+              <Route path="/booth/bar/:day/:boothId" element={<BarDetail />} />
             </Routes>
           </div>
         </div>
