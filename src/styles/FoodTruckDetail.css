@@ -1,0 +1,260 @@
+@font-face {
+  font-family: Galmuri9;
+  src: url("../assets/Galmuri9.woff2") format("woff2");
+  font-display: swap;
+}
+
+.food-truck-detail {
+  position: relative;
+  width: 394px;
+  height: 852px;
+  flex: none;
+  overflow: hidden;
+  background-size: 394px 852px;
+  background-repeat: no-repeat;
+  font-family: Galmuri9, sans-serif;
+  color: #111;
+}
+
+.food-truck-detail * {
+  box-sizing: border-box;
+}
+
+.food-truck-detail__header {
+  position: absolute;
+  z-index: 2;
+  inset: 61px 0 auto;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.food-truck-detail__header h1 {
+  margin: 0;
+  font:
+    400 20px/150% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.5px;
+  text-align: center;
+}
+
+.food-truck-detail__nav {
+  position: absolute;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.food-truck-detail__nav img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.food-truck-detail__nav--back {
+  left: 16px;
+}
+
+.food-truck-detail__nav--home {
+  right: 16px;
+  padding: 0;
+}
+
+.food-truck-detail__popup {
+  position: absolute;
+  top: 117px;
+  left: 26px;
+  width: 341.864px;
+  height: 654px;
+}
+
+.food-truck-detail__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.food-truck-detail__heading {
+  position: absolute;
+  top: 54px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.food-truck-detail__heading p {
+  margin: 0 0 3px;
+  font:
+    400 12px/180% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.24px;
+}
+
+.food-truck-detail__heading h2 {
+  margin: 0;
+  font:
+    400 18px/150% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.36px;
+}
+
+.food-truck-detail__tabs {
+  position: absolute;
+  top: 166px;
+  left: 66px;
+  display: flex;
+  gap: 14px;
+}
+
+.food-truck-detail__tab {
+  display: grid;
+  place-items: center;
+  width: 94px;
+  height: 41px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #111;
+  font:
+    400 16px/150% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.32px;
+  cursor: pointer;
+}
+
+.food-truck-detail__tab img {
+  grid-area: 1 / 1;
+  display: block;
+  width: 94px;
+  height: 41px;
+}
+
+.food-truck-detail__tab span {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+}
+
+.food-truck-detail__section-title {
+  position: absolute;
+  top: 233px;
+  left: 55px;
+  margin: 0;
+  font:
+    400 15px/150% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.3px;
+}
+
+.food-truck-detail__operation,
+.food-truck-detail__location,
+.food-truck-detail__detail {
+  position: absolute;
+  left: 48px;
+  width: 260px;
+  margin: 0;
+  border: 0.5px solid #838383;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.food-truck-detail__operation {
+  top: 256px;
+  height: 115px;
+  padding: 8px 16px;
+  font:
+    400 11px/220% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.22px;
+}
+
+.food-truck-detail__operation > div {
+  display: flex;
+  height: 24.2px;
+  align-items: center;
+  gap: 12px;
+}
+
+.food-truck-detail__operation dt {
+  display: flex;
+  width: 13px;
+  flex: none;
+  align-items: center;
+}
+
+.food-truck-detail__operation dt img {
+  display: block;
+  width: 13px;
+  height: auto;
+}
+
+.food-truck-detail__operation dd {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.food-truck-detail__section-title--location {
+  top: 385px;
+}
+
+.food-truck-detail__location {
+  top: 408px;
+  height: 175px;
+  overflow: hidden;
+}
+
+.food-truck-detail__location img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.food-truck-detail__detail {
+  top: 228px;
+  height: 353px;
+  padding: 12px;
+}
+
+.food-truck-detail__menu-title {
+  margin: 0 0 10px;
+  color: #fb1d78;
+  font:
+    400 24px/180% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.48px;
+  text-align: center;
+}
+
+.food-truck-detail__menu-title span {
+  color: #69f9de;
+}
+
+.food-truck-detail__menu-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.food-truck-detail__menu-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 32px;
+  font:
+    400 13px/180% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.26px;
+}
+
+.food-truck-detail__menu-price {
+  color: #fb1d78;
+  white-space: nowrap;
+}
