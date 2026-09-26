@@ -6,6 +6,12 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: Galmuri7;
+  src: url("../../node_modules/galmuri/dist/Galmuri7.woff2") format("woff2");
+  font-display: swap;
+}
+
 /* ===== 탭 ===== */
 
 .somnema-tabs {
@@ -153,4 +159,63 @@
 .somnema-intro__name {
   color: var(--booth-accent);
   font-family: Galmuri11, Galmuri9, sans-serif;
+}
+
+/* ===== 상영영화 탭 ===== */
+
+.somnema-movies {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: calc(var(--u) * 61);
+}
+
+.somnema-movies__days {
+  display: flex;
+  gap: calc(var(--u) * 21);
+}
+
+.somnema-movies__day {
+  width: calc(var(--u) * 105);
+  height: calc(var(--u) * 81);
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  color: var(--booth-text);
+  font-family: Galmuri7, Galmuri9, sans-serif;
+  font-size: calc(var(--u) * 16);
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+}
+
+.somnema-movies__day:focus {
+  outline: none;
+}
+
+.somnema-movies__day:focus-visible {
+  outline: 2px solid var(--booth-accent);
+  outline-offset: 2px;
+}
+
+.somnema-movies__poster {
+  display: block;
+  width: calc(var(--u) * 176);
+  height: calc(var(--u) * 252);
+  margin-top: calc(var(--u) * 37);
+  object-fit: cover;
+}
+
+.somnema-movies__title {
+  margin: calc(var(--u) * 27) 0 0;
+  color: var(--booth-text);
+  font-family: Galmuri11, Galmuri9, sans-serif;
+  font-size: calc(var(--u) * 13);
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  text-align: center;
 }

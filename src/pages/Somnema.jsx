@@ -9,6 +9,7 @@ import titleLogo from "../assets/images/pinkTitle.png";
 import footerImage from "../assets/images/somnema/dwu.png";
 import SomnemaTabs from "../components/somnema/SomnemaTabs.jsx";
 import SomnemaIntro from "../components/somnema/SomnemaIntro.jsx";
+import SomnemaMovies from "../components/somnema/SomnemaMovies.jsx";
 import { SOMNEMA_TABS } from "../constants/somnema.js";
 
 export default function Somnema() {
@@ -24,8 +25,10 @@ export default function Somnema() {
     switch (selectedTab) {
       case "intro":
         return <SomnemaIntro />;
+      case "movie":
+        return <SomnemaMovies />;
       default:
-        // 아직 안 만듦
+        // 아직 안 만든 탭은 임시 문구
         return (
           <p className="somnema-page__placeholder">{selectedLabel} 준비 중</p>
         );
@@ -60,6 +63,7 @@ export default function Somnema() {
           role="tabpanel"
           aria-labelledby={`somnema-tab-${selectedTab}`}
         >
+          {/* 카드 아래쪽 분홍 그라데이션 */}
           <div className="somnema-page__fade" aria-hidden="true" />
 
           <div className="somnema-page__content">{renderPanel()}</div>
