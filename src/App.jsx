@@ -11,6 +11,7 @@ import BarDetail from "./pages/BarDetail.jsx";
 import GeneralBoothDetail from "./pages/GeneralBoothDetail.jsx";
 import BoothMap from "./pages/BoothMap.jsx";
 import Somnema from "./pages/Somnema.jsx";
+import SomTalk from "./pages/SomTalk.jsx";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
               />
               <Route path="/booth-map" element={<BoothMap />}></Route>
               <Route path="/somnema" element={<Somnema />} />
+              <Route path="/som-talk" element={<SomTalk />} />
             </Routes>
           </div>
         </div>

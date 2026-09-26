@@ -1,0 +1,132 @@
+/* ===== 헤더 ===== */
+
+.somtalk-page__refresh {
+  position: absolute;
+  top: 0;
+  right: calc(var(--u) * 19);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--u) * 36);
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.somtalk-page__refresh img {
+  display: block;
+  width: calc(var(--u) * 20);
+  height: auto;
+}
+
+/* ===== 탭 ===== */
+
+.somtalk-tabs {
+  display: flex;
+  gap: calc(var(--u) * 4);
+  margin: calc(var(--u) * 22) 0 0 calc(var(--u) * 22);
+}
+
+.somtalk-tabs__tab,
+.somtalk-search__button {
+  flex: none;
+  width: calc(var(--u) * 62);
+  height: calc(var(--u) * 36);
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  color: var(--booth-text);
+  font-family: inherit;
+  font-size: calc(var(--u) * 13);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+}
+
+.somtalk-tabs__tab--selected {
+  color: #fff;
+}
+
+.somtalk-tabs__tab:focus,
+.somtalk-search__button:focus {
+  outline: none;
+}
+
+.somtalk-tabs__tab:focus-visible,
+.somtalk-search__button:focus-visible {
+  outline: 2px solid var(--booth-accent);
+  outline-offset: 2px;
+}
+
+/* ===== 검색 ===== */
+
+.somtalk-search {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 4);
+  width: calc(var(--u) * 345);
+  margin: calc(var(--u) * 12) 0 0 calc(var(--u) * 22);
+}
+
+.somtalk-search__input {
+  flex: 1;
+  min-width: 0;
+  height: calc(var(--u) * 36);
+  padding: 0 calc(var(--u) * 12) 0 calc(var(--u) * 17);
+  border: 0;
+  outline: none;
+  background-color: transparent;
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  color: var(--booth-text);
+  font-family: Galmuri11, Galmuri9, sans-serif;
+  font-size: calc(var(--u) * 15);
+  letter-spacing: -0.02em;
+}
+
+.somtalk-search__input::placeholder {
+  color: #525252;
+}
+
+.somtalk-search__button {
+  height: calc(var(--u) * 34);
+}
+
+/* ===== 메시지 목록 ===== */
+
+.somtalk-page__messages {
+  flex: 1; /* 남은 공간을 채워서 입력창을 맨 아래로 */
+  width: 100%;
+  margin-top: calc(var(--u) * 16);
+  padding: 0 calc(var(--u) * 22);
+}
+
+/* ===== 아래 입력창 ===== */
+
+.somtalk-page__compose {
+  flex: none;
+  width: calc(var(--u) * 345);
+  height: calc(var(--u) * 44);
+  margin: calc(var(--u) * 16) 0 calc(var(--u) * 58) calc(var(--u) * 24);
+  padding: 0 0 0 calc(var(--u) * 22);
+  border: 0;
+  background-color: transparent;
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  color: #525252;
+  font-family: Galmuri11, Galmuri9, sans-serif;
+  font-size: calc(var(--u) * 15);
+  letter-spacing: -0.02em;
+  text-align: left;
+  cursor: pointer;
+}
