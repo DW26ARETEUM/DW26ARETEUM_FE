@@ -8,6 +8,7 @@ import Home from "./pages/Home.jsx";
 import SomCollectionDetail from "./pages/SomCollectionDetail.jsx";
 import FestivalBoothDetail from "./pages/FestivalBoothDetail.jsx";
 import BarDetail from "./pages/BarDetail.jsx";
+import Timetable from "./pages/Timetable.jsx";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
                 element={<FestivalBoothDetail />}
               />
               <Route path="/booth/bar/:day/:boothId" element={<BarDetail />} />
+              <Route path="/timetable" element={<Timetable />} />
             </Routes>
           </div>
         </div>
