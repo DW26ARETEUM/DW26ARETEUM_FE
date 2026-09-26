@@ -4,6 +4,7 @@ import PerformanceTimetable from "./pages/PerformanceTimetable.jsx";
 import PerformanceDetail from "./pages/PerformanceDetail.jsx";
 import FoodTruckDetail from "./pages/FoodTruckDetail.jsx";
 import SomCollectionDetail from "./pages/SomCollectionDetail.jsx";
+import FestivalBoothDetail from "./pages/FestivalBoothDetail.jsx";
 
 function App() {
   return (
@@ -16,6 +17,10 @@ function App() {
               <Route
                 path="/booth/som-collection/:day/:boothId"
                 element={<SomCollectionDetail />}
+              />
+              <Route
+                path="/booth/festival/:boothId"
+                element={<FestivalBoothDetail />}
               />
             </Routes>
           </div>
