@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/BoothDetailLayout.css";
 import "../styles/SomTalk.css";
@@ -9,15 +9,37 @@ import defaultButton from "../assets/images/defaultBtn.png";
 import selectedButton from "../assets/images/selectedBtn.png";
 import searchBox from "../assets/images/searchBtn.png";
 import messageBox from "../assets/images/messageBtn.png";
+import SomTalkMessageList from "../components/somtalk/SomTalkMessageList.jsx";
+import { fetchMessages } from "../api/somtalk.js";
 import { SOMTALK_TABS } from "../constants/somtalk.js";
 
 export default function SomTalk() {
   const navigate = useNavigate();
+  const messagesRef = useRef(null);
   const [selectedTab, setSelectedTab] = useState("all");
   const [keyword, setKeyword] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [reloadCount, setReloadCount] = useState(0);
+
+  useEffect(() => {
+    let ignore = false;
+
+    fetchMessages(selectedTab).then((data) => {
+      if (!ignore) setMessages(data);
+    });
+
+    return () => {
+      ignore = true;
+    };
+  }, [selectedTab, reloadCount]);
+
+  useEffect(() => {
+    const list = messagesRef.current;
+    if (list) list.scrollTop = list.scrollHeight;
+  }, [messages]);
 
   const handleRefresh = () => {
-    // TODO(API): 선택된 탭의 메시지 목록 다시 불러오기
+    setReloadCount((count) => count + 1);
   };
 
   const handleSearch = (event) => {
@@ -99,8 +121,12 @@ export default function SomTalk() {
           </button>
         </form>
 
-        <section className="somtalk-page__messages" aria-label="메시지 목록">
-          {/* 말풍선 목록은 다음 단계에서 추가 */}
+        <section
+          ref={messagesRef}
+          className="somtalk-page__messages"
+          aria-label="메시지 목록"
+        >
+          <SomTalkMessageList messages={messages} />
         </section>
 
         <button
