@@ -5,16 +5,20 @@
 }
 
 .booth-map-page {
+  --u: calc(100cqw / 393);
+
+  container-type: inline-size;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   min-height: min(100vh, 852px);
-  padding: 56px 0 56px;
-  background-color: #ee87aa;
+  padding-bottom: 56px;
+  background-color: #fccec9;
   background-position: center top;
-  background-size: cover;
+  /* 폭 기준 고정 배율 (525/393) */
+  background-size: 133.59% auto;
   background-repeat: no-repeat;
   color: #111;
   font-family: Galmuri9, sans-serif;
@@ -27,24 +31,25 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 46px;
+  height: calc(var(--u) * 46);
+  margin-top: calc(var(--u) * 56);
 }
 
 .booth-map__header h1 {
-  font:
-    400 20px/150% Galmuri9,
-    sans-serif;
-  letter-spacing: -0.5px;
+  font-size: calc(var(--u) * 20);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.025em;
 }
 
 .booth-map__back {
   position: absolute;
   top: 0;
-  left: 11.5px;
+  left: calc(var(--u) * 11.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
+  width: calc(var(--u) * 36);
   height: 100%;
   padding: 0;
   border: 0;
@@ -54,7 +59,7 @@
 
 .booth-map__back img {
   display: block;
-  width: 8.69px;
+  width: calc(var(--u) * 8.69);
   height: auto;
 }
 
