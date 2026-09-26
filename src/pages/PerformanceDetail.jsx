@@ -1,8 +1,6 @@
+import { useParams } from "react-router-dom";
 import "../styles/PerformanceDetail.css";
-import background from "../assets/images/background/home.png";
-import popup from "../assets/images/boothDetail.png";
-import backButton from "../assets/images/backbtn.svg";
-import homeButton from "../assets/images/homebtn.svg";
+import BoothDetailLayout from "../components/boothDetail/BoothDetailLayout.jsx";
 import musicStaff from "../assets/images/booth/musicStaff.svg";
 import dancers from "../assets/images/booth/dancers.svg";
 import dateIcon from "../assets/images/booth/date.svg";
@@ -10,17 +8,16 @@ import timeIcon from "../assets/images/booth/time.svg";
 import locationIcon from "../assets/images/booth/location.svg";
 import personIcon from "../assets/images/booth/person.svg";
 
-// 공연 사진이 저장된 폴더의 파일을 읽기
 const imageFiles = import.meta.glob(
   "../assets/images/booth/performances/*.{png,jpg,jpeg,webp,svg}",
   { eager: true, query: "?url", import: "default" },
 );
 
 // 현재는 화면 확인용 데이터입니다. 공연타임테이블과 같은 순서입니다.
-// 수정: 피그마와 제목이 다른 공연에는 displayTitle을 추가했습니다.
-// 수정: 전유진과 박기영에는 상단 표시용 categoryLabel을 추가했습니다.
+// 피그마와 제목이 다른 공연에는 displayTitle을 사용합니다.
+// 전유진과 박기영에는 상단 표시용 categoryLabel을 사용합니다.
 // TODO(백엔드 완료 후): 제목·날짜·시간·분류·출연자·장소를 상세 API 응답으로 교체합니다.
-// TODO(백엔드 완료 후): imageFile만 별도 매핑으로 옮깁니다. ID가 안정적으로 유지되는지 확인한 뒤 ID 기준 매핑을 결정합니다.
+// TODO(백엔드 완료 후): ID가 안정적으로 유지되는지 확인한 뒤 사진을 ID 기준으로 연결합니다.
 const previewPerformances = {
   29: [
     {
@@ -173,7 +170,7 @@ const categoryLabels = {
 
 const stagePreview = "동덕여대 동인관 체육관";
 
-// 피그마 기준 255×170px 사진들
+// 피그마 기준 255×170px로 표시하는 사진입니다.
 const widePhotoFiles = new Set([
   "29-izna.png",
   "29-say-my-name.png",
@@ -181,129 +178,106 @@ const widePhotoFiles = new Set([
   "30-stayc.png",
 ]);
 
-// day와 index(0~7)로 현재 보여 줄 공연을 선택합니다.
-// TODO(백엔드 완료 후): 공연 ID를 받아 GET /api/v1/performances/{performanceId} 응답으로 화면을 표시합니다.
+// URL의 day와 index로 공연을 선택하고 공통 상세 레이아웃에 표시합니다.
+// TODO(백엔드 완료 후): 공연 ID로 상세 API를 호출하도록 변경합니다.
 export default function PerformanceDetail({
-  day = 29,
-  index = 0,
+  day: dayProp,
+  index: indexProp,
   onBack,
   onHome,
 }) {
+  const { day: routeDay, index: routeIndex } = useParams();
+  const day = Number(dayProp ?? routeDay ?? 29);
+  const index = Number(indexProp ?? routeIndex ?? 0);
   const performance = previewPerformances[day]?.[index];
 
-  const imagePath =
-    performance &&
-    `../assets/images/booth/performances/${performance.imageFile}`;
-
-  const image = imageFiles[imagePath];
+  const imagePath = performance
+    ? `../assets/images/booth/performances/${performance.imageFile}`
+    : null;
+  const image = imagePath ? imageFiles[imagePath] : null;
 
   return (
-    <main
-      className="performance-detail"
-      style={{ backgroundImage: `url(${background})` }}
-    >
-      <header className="performance-detail__header">
-        <button
-          className="performance-detail__nav performance-detail__nav--back"
-          type="button"
-          onClick={onBack}
-          aria-label="뒤로가기"
-        >
-          <img src={backButton} alt="" />
-        </button>
-
-        <h1>부스상세</h1>
-
-        <button
-          className="performance-detail__nav performance-detail__nav--home"
-          type="button"
-          onClick={onHome}
-          aria-label="홈으로"
-        >
-          <img src={homeButton} alt="" />
-        </button>
-      </header>
-
-      <section
-        className="performance-detail__popup"
-        aria-label="공연 상세 정보"
-      >
-        <img className="performance-detail__frame" src={popup} alt="" />
-
-        {!performance ? (
-          <p className="performance-detail__message">공연 정보가 없습니다.</p>
-        ) : (
-          <>
-            <img
-              className="performance-detail__music"
-              src={musicStaff}
-              alt=""
-              aria-hidden="true"
-            />
-
-            <div className="performance-detail__heading">
-              <p className="performance-detail__category">
-                {performance.categoryLabel ||
-                  categoryLabels[performance.category]}
-              </p>
-              <h2>{performance.displayTitle || performance.title}</h2>
-            </div>
-
-            {image && (
+    <BoothDetailLayout
+      showTabs={false}
+      onBack={onBack}
+      onHome={onHome}
+      basicInfo={
+        <div className="performance-detail__content">
+          {!performance ? (
+            <p className="performance-detail__message">공연 정보가 없습니다.</p>
+          ) : (
+            <>
               <img
-                className={`performance-detail__photo${
-                  widePhotoFiles.has(performance.imageFile)
-                    ? " performance-detail__photo--wide"
-                    : ""
-                }`}
-                src={image}
-                alt={`${performance.title} 공연 이미지`}
+                className="performance-detail__music"
+                src={musicStaff}
+                alt=""
+                aria-hidden="true"
               />
-            )}
 
-            <h3 className="performance-detail__info-title">세부 정보</h3>
-
-            <img
-              className="performance-detail__dancers"
-              src={dancers}
-              alt=""
-              aria-hidden="true"
-            />
-
-            <dl className="performance-detail__info">
-              <div>
-                <dt>
-                  <img src={dateIcon} alt="날짜" />
-                </dt>
-                <dd>9월 {day}일</dd>
+              <div className="performance-detail__heading">
+                <p className="performance-detail__category">
+                  {performance.categoryLabel ||
+                    categoryLabels[performance.category]}
+                </p>
+                <h2>{performance.displayTitle || performance.title}</h2>
               </div>
 
-              <div>
-                <dt>
-                  <img src={timeIcon} alt="시간" />
-                </dt>
-                <dd>
-                  {performance.startTime} ~ {performance.endTime}
-                </dd>
-              </div>
+              {image && (
+                <img
+                  className={`performance-detail__photo${
+                    widePhotoFiles.has(performance.imageFile)
+                      ? " performance-detail__photo--wide"
+                      : ""
+                  }`}
+                  src={image}
+                  alt={`${performance.title} 공연 이미지`}
+                />
+              )}
 
-              <div>
-                <dt>
-                  <img src={locationIcon} alt="장소" />
-                </dt>
-                <dd>{stagePreview}</dd>
-              </div>
+              <h3 className="performance-detail__info-title">세부 정보</h3>
 
-              <div>
-                <dt>
-                  <img src={personIcon} alt="출연" />
-                </dt>
-                <dd>{performance.performer}</dd>
-              </div>
-            </dl>
-          </>
-        )}
-      </section>
-    </main>
+              <img
+                className="performance-detail__dancers"
+                src={dancers}
+                alt=""
+                aria-hidden="true"
+              />
+
+              <dl className="performance-detail__info">
+                <div>
+                  <dt>
+                    <img src={dateIcon} alt="날짜" />
+                  </dt>
+                  <dd>9월 {day}일</dd>
+                </div>
+
+                <div>
+                  <dt>
+                    <img src={timeIcon} alt="시간" />
+                  </dt>
+                  <dd>
+                    {performance.startTime} ~ {performance.endTime}
+                  </dd>
+                </div>
+
+                <div>
+                  <dt>
+                    <img src={locationIcon} alt="장소" />
+                  </dt>
+                  <dd>{stagePreview}</dd>
+                </div>
+
+                <div>
+                  <dt>
+                    <img src={personIcon} alt="출연" />
+                  </dt>
+                  <dd>{performance.performer}</dd>
+                </div>
+              </dl>
+            </>
+          )}
+        </div>
+      }
+    />
   );
 }
