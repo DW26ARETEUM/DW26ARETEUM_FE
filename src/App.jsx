@@ -2,7 +2,7 @@ import "./styles/App.css";
 import PerformanceTimetable from "./pages/PerformanceTimetable.jsx";
 import PerformanceDetail from "./pages/PerformanceDetail.jsx";
 import FoodTruckDetail from "./pages/FoodTruckDetail.jsx";
-import Home from "./pages/home.jsx";
+import Home from "./pages/Home.jsx";
 
 function App() {
   return (
