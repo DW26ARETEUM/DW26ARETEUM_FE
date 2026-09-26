@@ -11,42 +11,62 @@ import searchBox from "../assets/images/searchBtn.png";
 import messageBox from "../assets/images/messageBtn.png";
 import SomTalkMessageList from "../components/somtalk/SomTalkMessageList.jsx";
 import SomTalkWriteModal from "../components/somtalk/SomTalkWriteModal.jsx";
-import { createMessage, fetchMessages } from "../api/somtalk.js";
+import {
+  createMessage,
+  fetchMessages,
+  searchMessages,
+} from "../api/somtalk.js";
 import { SOMTALK_TABS } from "../constants/somtalk.js";
 
 export default function SomTalk() {
   const navigate = useNavigate();
   const messagesRef = useRef(null);
   const [selectedTab, setSelectedTab] = useState("all");
-  const [keyword, setKeyword] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [keyword, setKeyword] = useState(""); // 검색창에 입력 중인 글자
+  const [searchKeyword, setSearchKeyword] = useState(""); // 실제 검색한 단어
+  const [messages, setMessages] = useState(null);
   const [reloadCount, setReloadCount] = useState(0);
   const [isWriting, setIsWriting] = useState(false);
 
+  // 탭, 검색어, 새로고침이 바뀌면 목록 다시 불러오기
   useEffect(() => {
     let ignore = false;
 
-    fetchMessages(selectedTab).then((data) => {
+    const request = searchKeyword
+      ? searchMessages(selectedTab, searchKeyword)
+      : fetchMessages(selectedTab);
+
+    request.then((data) => {
       if (!ignore) setMessages(data);
     });
 
+    // 응답이 늦게 와서 다른 결과가 덮어쓰는 것 방지
     return () => {
       ignore = true;
     };
-  }, [selectedTab, reloadCount]);
+  }, [selectedTab, searchKeyword, reloadCount]);
 
+  // 일반 목록은 최신(맨 아래), 검색 결과는 맨 위부터
   useEffect(() => {
     const list = messagesRef.current;
-    if (list) list.scrollTop = list.scrollHeight;
-  }, [messages]);
+    if (list) list.scrollTop = searchKeyword ? 0 : list.scrollHeight;
+  }, [messages, searchKeyword]);
 
   const handleRefresh = () => {
     setReloadCount((count) => count + 1);
   };
 
+  const handleKeywordChange = (event) => {
+    const { value } = event.target;
+    setKeyword(value);
+
+    // TODO(기디): 검색 종료 방법 확정되면 수정 (지금은 검색창을 비우면 목록으로)
+    if (!value.trim()) setSearchKeyword("");
+  };
+
   const handleSearch = (event) => {
     event.preventDefault();
-    // TODO(API): 검색 API 호출
+    setSearchKeyword(keyword.trim());
   };
 
   const closeWriteModal = useCallback(() => setIsWriting(false), []);
@@ -117,7 +137,7 @@ export default function SomTalk() {
             className="somtalk-search__input"
             style={{ backgroundImage: `url(${searchBox})` }}
             value={keyword}
-            onChange={(event) => setKeyword(event.target.value)}
+            onChange={handleKeywordChange}
             placeholder="검색어를 입력하세요"
             aria-label="검색어"
             enterKeyHint="search"
@@ -136,17 +156,22 @@ export default function SomTalk() {
           className="somtalk-page__messages"
           aria-label="메시지 목록"
         >
-          <SomTalkMessageList messages={messages} />
+          {messages && (
+            <SomTalkMessageList messages={messages} keyword={searchKeyword} />
+          )}
         </section>
 
-        <button
-          type="button"
-          className="somtalk-page__compose"
-          style={{ backgroundImage: `url(${messageBox})` }}
-          onClick={() => setIsWriting(true)}
-        >
-          이야기를 나눠보세요
-        </button>
+        {/* 피그마 기준 검색 결과 화면에서는 입력창 숨김 */}
+        {!searchKeyword && (
+          <button
+            type="button"
+            className="somtalk-page__compose"
+            style={{ backgroundImage: `url(${messageBox})` }}
+            onClick={() => setIsWriting(true)}
+          >
+            이야기를 나눠보세요
+          </button>
+        )}
       </div>
 
       {isWriting && (

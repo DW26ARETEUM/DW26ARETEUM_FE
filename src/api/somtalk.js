@@ -5,14 +5,25 @@
 import { SOMTALK_MOCK_MESSAGES } from "../mocks/somtalkMessages.js";
 import { getClientId } from "../utils/clientId.js";
 
+const filterByCategory = (messages, category) =>
+  category === "all"
+    ? messages
+    : messages.filter((message) => message.category === category);
+
 // 메시지 목록 조회 (오래된 순)
 export async function fetchMessages(category) {
   // TODO(API): GET 요청으로 교체
-  if (category === "all") return SOMTALK_MOCK_MESSAGES;
+  return filterByCategory(SOMTALK_MOCK_MESSAGES, category);
+}
 
-  return SOMTALK_MOCK_MESSAGES.filter(
-    (message) => message.category === category,
-  );
+// 메시지 검색 (최신순)
+export async function searchMessages(category, keyword) {
+  // TODO(API): 검색 GET 요청으로 교체
+  const lowerKeyword = keyword.toLowerCase();
+
+  return filterByCategory(SOMTALK_MOCK_MESSAGES, category)
+    .filter((message) => message.content.toLowerCase().includes(lowerKeyword))
+    .reverse();
 }
 
 // 메시지 등록

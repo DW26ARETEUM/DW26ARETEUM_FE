@@ -8,3 +8,15 @@ export const SOMTALK_TABS = [
 ];
 
 export const MAX_MESSAGE_LENGTH = 53;
+
+// TODO(기디): 빈 화면 문구 확정되면 수정 임시로 아무말 적음
+export const SOMTALK_EMPTY_TEXT = {
+  search: {
+    title: "검색 결과가 없어요!",
+    description: "첫 번째 소식을 남겨보세요",
+  },
+  list: {
+    title: "아직 소식이 없어요!",
+    description: "첫 번째 소식을 남겨보세요",
+  },
+};

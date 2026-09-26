@@ -228,6 +228,56 @@
   white-space: nowrap;
 }
 
+/* ===== 검색 결과 ===== */
+
+.somtalk-messages__result {
+  margin: 0 0 calc(var(--u) * 8) calc(var(--u) * 17);
+  color: #6e6e6e;
+  font-family: Galmuri11, Galmuri9, sans-serif;
+  font-size: calc(var(--u) * 10);
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+}
+
+.somtalk-message__highlight {
+  background: none;
+  color: #ff3b82;
+}
+
+/* ===== 빈 화면 ===== */
+
+.somtalk-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: calc(var(--u) * 74);
+  font-family: Galmuri11, Galmuri9, sans-serif;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.somtalk-empty p {
+  margin: 0;
+}
+
+.somtalk-empty__face {
+  color: #4b1528;
+  font-size: calc(var(--u) * 40);
+}
+
+.somtalk-empty__title {
+  margin-top: calc(var(--u) * 28) !important;
+  color: var(--booth-text);
+  font-size: calc(var(--u) * 16);
+}
+
+.somtalk-empty__description {
+  margin-top: calc(var(--u) * 4) !important;
+  color: #fff;
+  font-size: calc(var(--u) * 12);
+}
+
 /* ===== 글쓰기 팝업 ===== */
 
 .somtalk-write {
