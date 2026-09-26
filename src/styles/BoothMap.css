@@ -1,0 +1,234 @@
+@font-face {
+  font-family: Galmuri11;
+  src: url("galmuri/dist/Galmuri11.woff2") format("woff2");
+  font-display: swap;
+}
+
+.booth-map-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: min(100vh, 852px);
+  padding: 56px 0 56px;
+  background-color: #ee87aa;
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #111;
+  font-family: Galmuri9, sans-serif;
+}
+
+/* 헤더 */
+.booth-map__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 46px;
+}
+
+.booth-map__header h1 {
+  font:
+    400 20px/150% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.5px;
+}
+
+.booth-map__back {
+  position: absolute;
+  top: 0;
+  left: 11.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.booth-map__back img {
+  display: block;
+  width: 8.69px;
+  height: auto;
+}
+
+/* 날짜 탭 */
+.booth-map__days {
+  display: flex;
+  gap: 24px;
+  margin-top: 12px;
+}
+
+.booth-map__day {
+  width: 105px;
+  height: 81px;
+  padding: 0 0 4px;
+  border: 0;
+  background: center / contain no-repeat;
+  color: #525252;
+  font:
+    400 16px/150% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.32px;
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.booth-map__day--selected {
+  color: #111;
+  opacity: 1;
+}
+
+/* 지도 슬라이더 */
+.booth-map__slider-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: calc(100% - 42px);
+  max-width: 351px;
+  margin-top: 24px;
+}
+
+.booth-map__slider {
+  display: flex;
+  width: 100%;
+  aspect-ratio: 351 / 262;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.booth-map__slider::-webkit-scrollbar {
+  display: none;
+}
+
+.booth-map__map {
+  display: block;
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  user-select: none;
+}
+
+.booth-map__dots {
+  display: flex;
+  gap: 8px;
+}
+
+.booth-map__dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 100px;
+  background: #d9d9d9;
+  cursor: pointer;
+}
+
+.booth-map__dot--active {
+  background: #fff;
+}
+
+/* 필터 + 목록 패널 */
+.booth-map__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: calc(100% - 28px);
+  max-width: 365px;
+  margin-top: 19px;
+  padding: 12px 20px;
+}
+
+.booth-map__panel--list {
+  padding-bottom: 24px;
+  background: url("../assets/images/boothMap/listPanel.svg") center / 100% 100%
+    no-repeat;
+}
+
+.booth-map__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 4px;
+}
+
+.booth-map-filter {
+  position: relative;
+  height: 36px;
+  padding: 0 18px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.booth-map-filter__shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.booth-map-filter__label {
+  position: relative;
+  color: #111;
+  font:
+    400 13px/150% Galmuri9,
+    sans-serif;
+  letter-spacing: -0.26px;
+  white-space: nowrap;
+}
+
+.booth-map-filter--selected .booth-map-filter__label {
+  color: #fff;
+}
+
+.booth-map__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 14px;
+  list-style: none;
+}
+
+.booth-map__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #111;
+  text-align: left;
+  cursor: pointer;
+}
+
+.booth-map__number {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 20px;
+  border-radius: 2px;
+  background: #fff0fc;
+  font:
+    400 12px/150% Galmuri11,
+    sans-serif;
+  letter-spacing: -0.24px;
+}
+
+.booth-map__name {
+  font:
+    400 13px/150% Galmuri11,
+    sans-serif;
+  letter-spacing: -0.26px;
+  white-space: pre-line;
+}

@@ -9,6 +9,7 @@ import SomCollectionDetail from "./pages/SomCollectionDetail.jsx";
 import FestivalBoothDetail from "./pages/FestivalBoothDetail.jsx";
 import BarDetail from "./pages/BarDetail.jsx";
 import GeneralBoothDetail from "./pages/GeneralBoothDetail.jsx";
+import BoothMap from "./pages/BoothMap.jsx";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
                 path="/booth/general/:day/:boothId"
                 element={<GeneralBoothDetail />}
               />
+              <Route path="/booth-map" element={<BoothMap />}></Route>
             </Routes>
           </div>
         </div>
