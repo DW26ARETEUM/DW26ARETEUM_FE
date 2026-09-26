@@ -1,3 +1,5 @@
+import { Routes, Route } from "react-router-dom";
+
 import "./styles/App.css";
 import PerformanceTimetable from "./pages/PerformanceTimetable.jsx";
 import PerformanceDetail from "./pages/PerformanceDetail.jsx";
@@ -10,7 +12,9 @@ function App() {
       <div className="mobile-frame">
         <div className="mobile-content">
           <div className="app-content">
-            <FoodTruckDetail />
+            <Routes>
+              <Route path="/" element={<Home />} />
+            </Routes>
           </div>
         </div>
       </div>
