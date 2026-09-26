@@ -95,7 +95,7 @@
 }
 
 .booth-detail__nav--home {
-  top: calc(var(--u) * 9);
+  top: calc(var(--u) * 6.5);
   left: calc(var(--u) * 341);
   width: calc(var(--u) * 33);
   height: calc(var(--u) * 33);
