@@ -227,3 +227,162 @@
   line-height: 1.5;
   white-space: nowrap;
 }
+
+/* ===== 글쓰기 팝업 ===== */
+
+.somtalk-write {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+}
+
+.somtalk-write__backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: rgba(17, 17, 17, 0.5);
+  cursor: pointer;
+}
+
+.somtalk-write__popup {
+  position: absolute;
+  top: calc(var(--u) * 101);
+  left: calc(var(--u) * 27);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: calc(var(--u) * 342);
+  height: calc(var(--u) * 654);
+  margin: 0;
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.somtalk-write__close {
+  position: absolute;
+  top: calc(var(--u) * 4);
+  left: calc(var(--u) * 293);
+  width: calc(var(--u) * 38);
+  height: calc(var(--u) * 26);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.somtalk-write__heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: calc(var(--u) * 239);
+  margin: calc(var(--u) * 65) 0 0 calc(var(--u) * 52);
+  padding-bottom: calc(var(--u) * 5);
+  border-bottom: 1px solid var(--booth-text);
+}
+
+.somtalk-write__heading img {
+  width: calc(var(--u) * 49);
+  height: calc(var(--u) * 27);
+  image-rendering: pixelated;
+}
+
+.somtalk-write__heading h2 {
+  margin: 0;
+  font-size: calc(var(--u) * 20);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+}
+
+.somtalk-write__label {
+  margin: calc(var(--u) * 38) 0 0 calc(var(--u) * 56);
+  color: #525252;
+  font-family: Galmuri11, Galmuri9, sans-serif;
+  font-size: calc(var(--u) * 12);
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+}
+
+.somtalk-write__categories {
+  display: flex;
+  gap: calc(var(--u) * 4);
+  margin: calc(var(--u) * 8) 0 0 calc(var(--u) * 49);
+}
+
+.somtalk-write__field {
+  position: relative;
+  width: calc(var(--u) * 253);
+  height: calc(var(--u) * 319);
+  margin: calc(var(--u) * 14) 0 0 calc(var(--u) * 45);
+}
+
+.somtalk-write__textarea {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: calc(var(--u) * 19) calc(var(--u) * 19) calc(var(--u) * 36);
+  border: 0.5px solid #838383;
+  border-radius: calc(var(--u) * 15);
+  outline: none;
+  resize: none;
+  background: #fff;
+  color: var(--booth-text);
+  font-family: Galmuri11, Galmuri9, sans-serif;
+  font-size: calc(var(--u) * 15);
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+}
+
+.somtalk-write__textarea::placeholder {
+  color: #8d8d8d;
+}
+
+.somtalk-write__count {
+  position: absolute;
+  right: calc(var(--u) * 11);
+  bottom: calc(var(--u) * 10);
+  color: #8d8d8d;
+  font-family: Galmuri11, Galmuri9, sans-serif;
+  font-size: calc(var(--u) * 12);
+  line-height: 1.5;
+  pointer-events: none;
+}
+
+.somtalk-write__submit {
+  width: calc(var(--u) * 299);
+  height: calc(var(--u) * 44);
+  margin: calc(var(--u) * 25) 0 0 calc(var(--u) * 22);
+  padding: 0;
+  border-style: solid;
+  border-width: calc(var(--u) * 16) calc(var(--u) * 18);
+  border-image-source: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='44' viewBox='0 0 60 44' shape-rendering='crispEdges'%3E%3Cpath fill='%23FF3B82' d='M12 0h36v2h-36zM8 2h44v2h-44zM4 4h52v2h-52zM2 6h56v4h-56zM0 10h60v24h-60zM2 34h56v4h-56zM4 38h52v2h-52zM8 40h44v2h-44zM12 42h36v2h-36z'/%3E%3Cpath fill='%23FFB3D9' d='M14 2h32v2h-32zM10 4h40v2h-40zM6 6h48v2h-48zM4 8h52v4h-52zM2 12h56v20h-56zM4 32h52v4h-52zM6 36h48v2h-48zM10 38h40v2h-40zM14 40h32v2h-32z'/%3E%3Cpath fill='%23FFFFFF' d='M17 5h26v2h-26zM13 7h34v2h-34zM9 9h42v2h-42zM7 11h46v4h-46zM5 15h50v14h-50zM7 29h46v4h-46zM9 33h42v2h-42zM13 35h34v2h-34zM17 37h26v2h-26z'/%3E%3C/svg%3E");
+  border-image-slice: 16 18 fill;
+  border-image-repeat: stretch;
+  background: none;
+  color: var(--booth-text);
+  font-family: Galmuri11, Galmuri9, sans-serif;
+  font-size: calc(var(--u) * 14);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+}
+
+.somtalk-write__submit:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.somtalk-write__close:focus,
+.somtalk-write__submit:focus {
+  outline: none;
+}
+
+.somtalk-write__close:focus-visible,
+.somtalk-write__submit:focus-visible {
+  outline: 2px solid var(--booth-accent);
+  outline-offset: 2px;
+}

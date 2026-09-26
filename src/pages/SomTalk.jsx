@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/BoothDetailLayout.css";
 import "../styles/SomTalk.css";
@@ -10,7 +10,8 @@ import selectedButton from "../assets/images/selectedBtn.png";
 import searchBox from "../assets/images/searchBtn.png";
 import messageBox from "../assets/images/messageBtn.png";
 import SomTalkMessageList from "../components/somtalk/SomTalkMessageList.jsx";
-import { fetchMessages } from "../api/somtalk.js";
+import SomTalkWriteModal from "../components/somtalk/SomTalkWriteModal.jsx";
+import { createMessage, fetchMessages } from "../api/somtalk.js";
 import { SOMTALK_TABS } from "../constants/somtalk.js";
 
 export default function SomTalk() {
@@ -20,6 +21,7 @@ export default function SomTalk() {
   const [keyword, setKeyword] = useState("");
   const [messages, setMessages] = useState([]);
   const [reloadCount, setReloadCount] = useState(0);
+  const [isWriting, setIsWriting] = useState(false);
 
   useEffect(() => {
     let ignore = false;
@@ -45,6 +47,14 @@ export default function SomTalk() {
   const handleSearch = (event) => {
     event.preventDefault();
     // TODO(API): 검색 API 호출
+  };
+
+  const closeWriteModal = useCallback(() => setIsWriting(false), []);
+
+  const handleWriteSubmit = async (newMessage) => {
+    await createMessage(newMessage);
+    setIsWriting(false);
+    setReloadCount((count) => count + 1);
   };
 
   return (
@@ -133,10 +143,18 @@ export default function SomTalk() {
           type="button"
           className="somtalk-page__compose"
           style={{ backgroundImage: `url(${messageBox})` }}
+          onClick={() => setIsWriting(true)}
         >
           이야기를 나눠보세요
         </button>
       </div>
+
+      {isWriting && (
+        <SomTalkWriteModal
+          onClose={closeWriteModal}
+          onSubmit={handleWriteSubmit}
+        />
+      )}
     </main>
   );
 }
