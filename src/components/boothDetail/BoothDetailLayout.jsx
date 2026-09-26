@@ -14,6 +14,7 @@ export default function BoothDetailLayout({
   defaultTab = "basic",
   onBack,
   onHome,
+  showTabs = true, // 추가: 공연 상세에서는 false로 전달해 탭을 숨깁니다.
 }) {
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState(defaultTab);
@@ -58,18 +59,28 @@ export default function BoothDetailLayout({
         >
           <div className="booth-detail__heading-area">{headingContent}</div>
 
-          <BoothDetailTabs
-            selectedTab={selectedTab}
-            onChange={setSelectedTab}
-          />
+          {/* 추가: 공연 상세에서는 탭을 표시하지 않습니다. */}
+          {showTabs && (
+            <BoothDetailTabs
+              selectedTab={selectedTab}
+              onChange={setSelectedTab}
+            />
+          )}
 
           <div
-            id={`booth-detail-panel-${selectedTab}`}
+            id={showTabs ? `booth-detail-panel-${selectedTab}` : undefined}
             className="booth-detail__panel"
-            role="tabpanel"
-            aria-labelledby={`booth-detail-tab-${selectedTab}`}
+            role={showTabs ? "tabpanel" : undefined}
+            aria-labelledby={
+              showTabs ? `booth-detail-tab-${selectedTab}` : undefined
+            }
           >
-            {selectedTab === "basic" ? basicInfo : detailInfo}
+            {/* 수정: 탭이 없으면 기본 콘텐츠를 항상 표시합니다. */}
+            {showTabs
+              ? selectedTab === "basic"
+                ? basicInfo
+                : detailInfo
+              : basicInfo}
           </div>
         </section>
       </div>

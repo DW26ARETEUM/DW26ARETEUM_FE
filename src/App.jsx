@@ -17,7 +17,15 @@ function App() {
           <div className="app-content">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/foodtruck" element={<FoodTruckDetail />} />
+              <Route path="/foodtruck/detail" element={<FoodTruckDetail />} />
+              <Route
+                path="/performance/timetable"
+                element={<PerformanceTimetable />}
+              />
+              <Route
+                path="/performance/:day/:index"
+                element={<PerformanceDetail />}
+              />
               <Route
                 path="/booth/som-collection/:day/:boothId"
                 element={<SomCollectionDetail />}
