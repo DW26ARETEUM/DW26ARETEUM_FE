@@ -73,13 +73,32 @@
   width: calc(var(--u) * 342);
   height: calc(var(--u) * 654);
   margin: calc(var(--u) * 6) 0 calc(var(--u) * 23) calc(var(--u) * 25);
-  background-position: center;
-  background-size: 100% 100%;
+  background-image: var(--popup-image);
+  background-position: top;
+  background-size: 100% calc(var(--u) * 654);
+  background-repeat: no-repeat;
+}
+
+.somnema-page__popup--short {
+  height: calc(var(--u) * 560);
+}
+
+.somnema-page__popup--short::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: calc(var(--u) * 100);
+  background-image: var(--popup-image);
+  background-position: bottom;
+  background-size: 100% calc(var(--u) * 654);
   background-repeat: no-repeat;
 }
 
 .somnema-page__fade {
   position: absolute;
+  z-index: 1;
   left: calc(var(--u) * 14);
   bottom: calc(var(--u) * 37);
   width: calc(var(--u) * 311);
@@ -94,13 +113,13 @@
 
 .somnema-page__content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
 }
 
 .somnema-page__logo {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   left: calc(var(--u) * 74);
   bottom: calc(var(--u) * 72);
   width: calc(var(--u) * 190);
@@ -108,17 +127,15 @@
   image-rendering: pixelated;
 }
 
-.somnema-page__placeholder {
-  margin: calc(var(--u) * 82) 0 0;
-  font-size: calc(var(--u) * 13);
-  text-align: center;
+.somnema-page__popup--short .somnema-page__logo {
+  bottom: calc(var(--u) * 68);
 }
 
 /* ===== 아래 성 그림 ===== */
 
 .somnema-page__footer {
   width: 100%;
-  margin-top: auto; /* 내용이 짧아도 항상 맨 아래에 붙도록 */
+  margin-top: auto;
   background-color: #fcc9c7;
   line-height: 0;
 }
@@ -218,4 +235,51 @@
   line-height: 1.5;
   letter-spacing: -0.02em;
   text-align: center;
+}
+
+/* ===== 안내 탭 공통 (이벤트, 대여부스, 유의사항) ===== */
+
+.somnema-info {
+  margin-top: calc(var(--u) * 83);
+  color: var(--booth-text);
+  font-family: Galmuri14, Galmuri11, Galmuri9, sans-serif;
+  font-size: calc(var(--u) * 13);
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.somnema-info :where(p, ul) {
+  margin: 0;
+  padding: 0;
+  white-space: pre-line;
+}
+
+.somnema-info > * + * {
+  margin-top: 1.5em;
+}
+
+.somnema-info--event {
+  line-height: 1.6;
+}
+
+.somnema-info--event > * + * {
+  margin-top: 1.6em;
+}
+
+.somnema-info__accent {
+  color: var(--booth-accent);
+  font-family: Galmuri11, Galmuri9, sans-serif;
+}
+
+.somnema-info__strong {
+  font-family: Galmuri11, Galmuri9, sans-serif;
+}
+
+.somnema-info__list {
+  list-style: none;
+}
+
+.somnema-info__list li::before {
+  content: "• ";
 }

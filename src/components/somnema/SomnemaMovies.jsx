@@ -1,5 +1,4 @@
 // 솜네마 - 상영영화 탭 내용
-// 영화 정보는 constants/somnema.js 의 SOMNEMA_MOVIES 에서 관리합니다.
 
 import { useState } from "react";
 import cloudDefault from "../../assets/images/cloudDefault.png";

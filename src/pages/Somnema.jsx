@@ -10,30 +10,27 @@ import footerImage from "../assets/images/somnema/dwu.png";
 import SomnemaTabs from "../components/somnema/SomnemaTabs.jsx";
 import SomnemaIntro from "../components/somnema/SomnemaIntro.jsx";
 import SomnemaMovies from "../components/somnema/SomnemaMovies.jsx";
+import SomnemaEvent from "../components/somnema/SomnemaEvent.jsx";
+import SomnemaRental from "../components/somnema/SomnemaRental.jsx";
+import SomnemaNotice from "../components/somnema/SomnemaNotice.jsx";
 import { SOMNEMA_TABS } from "../constants/somnema.js";
+
+const PANELS = {
+  intro: SomnemaIntro,
+  movie: SomnemaMovies,
+  event: SomnemaEvent,
+  rental: SomnemaRental,
+  notice: SomnemaNotice,
+};
 
 export default function Somnema() {
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState("intro");
 
-  const selectedLabel = SOMNEMA_TABS.find(
+  const isShortPopup = SOMNEMA_TABS.find(
     ({ value }) => value === selectedTab,
-  )?.label;
-
-  // 선택된 탭에 맞는 내용 보여주기
-  const renderPanel = () => {
-    switch (selectedTab) {
-      case "intro":
-        return <SomnemaIntro />;
-      case "movie":
-        return <SomnemaMovies />;
-      default:
-        // 아직 안 만든 탭은 임시 문구
-        return (
-          <p className="somnema-page__placeholder">{selectedLabel} 준비 중</p>
-        );
-    }
-  };
+  )?.shortPopup;
+  const Panel = PANELS[selectedTab];
 
   return (
     <main
@@ -58,15 +55,18 @@ export default function Somnema() {
 
         <section
           id="somnema-panel"
-          className="somnema-page__popup"
-          style={{ backgroundImage: `url(${popup})` }}
+          className={`somnema-page__popup${
+            isShortPopup ? " somnema-page__popup--short" : ""
+          }`}
+          style={{ "--popup-image": `url(${popup})` }}
           role="tabpanel"
           aria-labelledby={`somnema-tab-${selectedTab}`}
         >
-          {/* 카드 아래쪽 분홍 그라데이션 */}
           <div className="somnema-page__fade" aria-hidden="true" />
 
-          <div className="somnema-page__content">{renderPanel()}</div>
+          <div className="somnema-page__content">
+            <Panel />
+          </div>
 
           <img
             className="somnema-page__logo"
