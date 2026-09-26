@@ -1,0 +1,8 @@
+/* 추가: 아직 제공되지 않은 정보에 대한 임시 안내 문구입니다. */
+.general-booth-detail__message {
+  margin: 18px 0 0;
+  color: #525252;
+  font-size: calc(var(--u) * 12);
+  line-height: 1.5;
+  text-align: center;
+}
