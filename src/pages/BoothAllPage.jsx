@@ -40,7 +40,20 @@ function getInitialFavorites() {
   try {
     const savedFavorites = localStorage.getItem(FAVORITES_STORAGE_KEY);
 
-    return savedFavorites ? JSON.parse(savedFavorites) : [];
+    if (!savedFavorites) {
+      return [];
+    }
+
+    const parsedFavorites = JSON.parse(savedFavorites);
+
+    if (!Array.isArray(parsedFavorites)) {
+      return [];
+    }
+
+    // 앞으로는 실제 booth.id(Number)만 사용
+    return parsedFavorites
+      .map((id) => Number(id))
+      .filter((id) => Number.isFinite(id));
   } catch {
     return [];
   }
@@ -67,21 +80,19 @@ function DateButton({ date, selectedDate, onSelect }) {
   );
 }
 
-function HeartButton({ cardIndex, date, isFavorite, onToggle, style }) {
+function HeartButton({ boothId, isFavorite, onToggle, style }) {
   return (
     <button
       className="booth-heart-button"
       type="button"
       style={style}
-      aria-label={`${date}일 ${cardIndex + 1}번 부스 ${
-        isFavorite ? "즐겨찾기 해제" : "즐겨찾기 추가"
-      }`}
+      aria-label={isFavorite ? "즐겨찾기 해제" : "즐겨찾기 추가"}
       aria-pressed={isFavorite}
       onClick={(event) => {
         event.preventDefault();
         event.stopPropagation();
 
-        onToggle(date, cardIndex);
+        onToggle(boothId);
       }}
     >
       <img src={isFavorite ? heartSelected : heartDefault} alt="" />
@@ -126,8 +137,7 @@ function BoothCard({ booth, isFavorite, onToggleFavorite }) {
       </Link>
 
       <HeartButton
-        cardIndex={booth.cardIndex}
-        date={booth.date}
+        boothId={booth.id}
         isFavorite={isFavorite}
         onToggle={onToggleFavorite}
       />
@@ -151,7 +161,7 @@ function BoothListArtwork({ category, date, favorites, onToggleFavorite }) {
         <BoothCard
           key={booth.id}
           booth={booth}
-          isFavorite={favorites.includes(`${date}-${booth.cardIndex}`)}
+          isFavorite={favorites.includes(booth.id)}
           onToggleFavorite={onToggleFavorite}
         />
       ))}
@@ -159,27 +169,15 @@ function BoothListArtwork({ category, date, favorites, onToggleFavorite }) {
   );
 }
 
-function FavoriteCard({ cardIndex, date, onToggleFavorite }) {
-  const booth = (date === 29 ? booths29 : booths30)[cardIndex];
-
-  return booth ? (
-    <BoothCard booth={booth} isFavorite onToggleFavorite={onToggleFavorite} />
-  ) : null;
-}
-
 function BoothAllPage() {
   const navigate = useNavigate();
 
   const [selectedDate, setSelectedDate] = useState(29);
-
   const [selectedCategory, setSelectedCategory] = useState("전체");
 
   const [searchTerm, setSearchTerm] = useState("");
-
   const [submittedQuery, setSubmittedQuery] = useState("");
-
   const [searchResults, setSearchResults] = useState([]);
-
   const [isSearching, setIsSearching] = useState(false);
 
   const [showFavorites, setShowFavorites] = useState(false);
@@ -239,28 +237,33 @@ function BoothAllPage() {
     }
   };
 
-  const selectedDateFavorites = favorites
-    .filter((favoriteKey) => favoriteKey.startsWith(`${selectedDate}-`))
-    .map((favoriteKey) => Number(favoriteKey.split("-")[1]));
+  /*
+   * 찜은 날짜/cardIndex가 아니라 실제 booth.id 기준으로 관리.
+   * 양일에 같은 booth.id가 있더라도 찜 목록에서는 하나만 표시.
+   */
+  const allBooths = [...booths29, ...booths30];
 
-  const toggleFavorite = (date, cardIndex) => {
-    const favoriteKey = `${date}-${cardIndex}`;
+  const favoriteBooths = allBooths.filter(
+    (booth, index, booths) =>
+      favorites.includes(booth.id) &&
+      booths.findIndex((item) => item.id === booth.id) === index,
+  );
 
+  const toggleFavorite = (boothId) => {
     if (
-      !favorites.includes(favoriteKey) &&
+      !favorites.includes(boothId) &&
       localStorage.getItem(FAVORITE_MODAL_CONFIRMED_KEY) !== "true"
     ) {
-      setPendingFavorite(favoriteKey);
-
+      setPendingFavorite(boothId);
       setIsFavoriteModalOpen(true);
 
       return;
     }
 
     setFavorites((currentFavorites) =>
-      currentFavorites.includes(favoriteKey)
-        ? currentFavorites.filter((item) => item !== favoriteKey)
-        : [...currentFavorites, favoriteKey],
+      currentFavorites.includes(boothId)
+        ? currentFavorites.filter((id) => id !== boothId)
+        : [...currentFavorites, boothId],
     );
   };
 
@@ -297,7 +300,7 @@ function BoothAllPage() {
   const openFavoritesFromModal = () => {
     localStorage.setItem(FAVORITE_MODAL_CONFIRMED_KEY, "true");
 
-    if (pendingFavorite) {
+    if (pendingFavorite !== null) {
       setFavorites((currentFavorites) =>
         currentFavorites.includes(pendingFavorite)
           ? currentFavorites
@@ -306,11 +309,9 @@ function BoothAllPage() {
     }
 
     setPendingFavorite(null);
-
     setIsFavoriteModalOpen(false);
 
     setShowFavorites(true);
-
     setSelectedCategory(null);
 
     setSubmittedQuery("");
@@ -324,7 +325,6 @@ function BoothAllPage() {
 
   const cancelFavoriteFromModal = () => {
     setPendingFavorite(null);
-
     setIsFavoriteModalOpen(false);
   };
 
@@ -335,8 +335,8 @@ function BoothAllPage() {
         <button
           className="booth-back-button"
           type="button"
-          aria-label="뒤로 가기"
-          onClick={() => navigate(-1)}
+          aria-label="홈으로 이동"
+          onClick={() => navigate("/")}
         >
           <img src={backButton} alt="" />
         </button>
@@ -361,7 +361,6 @@ function BoothAllPage() {
 
       {/* 검색 */}
       <form className="booth-search" role="search" onSubmit={handleSearch}>
-        {/* 검색 입력창 */}
         <div className="booth-search-input-wrap">
           <img
             className="booth-search-input-bg"
@@ -387,16 +386,13 @@ function BoothAllPage() {
                 searchRequestId.current += 1;
 
                 setSubmittedQuery("");
-
                 setSearchResults([]);
-
                 setIsSearching(false);
               }
             }}
           />
         </div>
 
-        {/* 검색 버튼 */}
         <button className="booth-search-button" type="submit">
           <img src={defaultBtn} alt="" aria-hidden="true" />
 
@@ -420,7 +416,6 @@ function BoothAllPage() {
                 aria-pressed={isSelected}
                 onClick={() => {
                   setSelectedCategory(category);
-
                   setShowFavorites(false);
                 }}
               >
@@ -444,7 +439,6 @@ function BoothAllPage() {
             aria-pressed={showFavorites}
             onClick={() => {
               setShowFavorites(true);
-
               setSelectedCategory(null);
             }}
           >
@@ -479,25 +473,23 @@ function BoothAllPage() {
                 <BoothCard
                   key={booth.id}
                   booth={booth}
-                  isFavorite={favorites.includes(
-                    `${booth.date}-${booth.cardIndex}`,
-                  )}
+                  isFavorite={favorites.includes(booth.id)}
                   onToggleFavorite={toggleFavorite}
                 />
               ))}
             </div>
           </div>
-        ) : showFavorites && selectedDateFavorites.length === 0 ? (
+        ) : showFavorites && favoriteBooths.length === 0 ? (
           <div className="booth-empty-favorites">
             <img src={bookmarkEmpty} alt="저장된 부스가 없어요" />
           </div>
         ) : showFavorites ? (
           <div className="favorite-booth-list">
-            {selectedDateFavorites.map((cardIndex) => (
-              <FavoriteCard
-                key={`${selectedDate}-${cardIndex}`}
-                cardIndex={cardIndex}
-                date={selectedDate}
+            {favoriteBooths.map((booth) => (
+              <BoothCard
+                key={booth.id}
+                booth={booth}
+                isFavorite
                 onToggleFavorite={toggleFavorite}
               />
             ))}
