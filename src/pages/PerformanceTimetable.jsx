@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/PerformanceTimetable.css";
 import background from "../assets/images/background/timetableBackground.png";
 import backButton from "../assets/images/backbtn.svg";
@@ -16,7 +17,7 @@ import sparkle from "../assets/images/timetable/sparkle.svg";
 import timetableLogo from "../assets/images/timetable/timetableLogo.svg";
 import skyline from "../assets/images/timetable/skyline.svg";
 
-// 날짜별 공연 정보를 표시, 추후 api 연동 예정
+// 날짜별 공연 정보를 표시합니다. 추후 API 응답으로 교체할 예정입니다.
 const performances = {
   29: [
     { time: "18:05 ~ 18:30", name: "한소리" },
@@ -40,11 +41,12 @@ const performances = {
   ],
 };
 
-// 연결선 이미지를 위에서 아래 순서대로 사용
+// 연결선 이미지를 위에서 아래 순서대로 사용합니다.
 const lines = [line1, line2, line3, line4, line5, line6, line7];
 
-// 날짜 선택에 따라 공연 목록을 전환
+// 수정: 날짜별 공연을 표시하고, 선택한 공연의 상세 경로로 이동합니다.
 export default function PerformanceTimetable({ onBack, onHome }) {
+  const navigate = useNavigate();
   const [selectedDay, setSelectedDay] = useState(29);
 
   return (
@@ -56,7 +58,7 @@ export default function PerformanceTimetable({ onBack, onHome }) {
         <button
           type="button"
           className="performance-timetable__nav performance-timetable__nav--back"
-          onClick={onBack}
+          onClick={onBack ?? (() => navigate(-1))}
           aria-label="뒤로가기"
         >
           <img src={backButton} alt="" />
@@ -67,7 +69,7 @@ export default function PerformanceTimetable({ onBack, onHome }) {
         <button
           type="button"
           className="performance-timetable__nav performance-timetable__nav--home"
-          onClick={onHome}
+          onClick={onHome ?? (() => navigate("/"))}
           aria-label="홈으로"
         >
           <img src={homeButton} alt="" />
@@ -119,8 +121,16 @@ export default function PerformanceTimetable({ onBack, onHome }) {
             key={`${selectedDay}-${time}-${name}`}
             className={`performance-timetable__performance performance-timetable__performance--${index + 1}`}
           >
-            <span className="performance-timetable__time">{time}</span>
-            <span className="performance-timetable__name">{name}</span>
+            {/* 추가: 현재 날짜와 공연 순서를 상세 페이지 주소로 전달합니다. */}
+            <button
+              type="button"
+              className="performance-timetable__performance-button"
+              onClick={() => navigate(`/performance/${selectedDay}/${index}`)}
+              aria-label={`9월 ${selectedDay}일 ${name} 공연 상세 보기`}
+            >
+              <span className="performance-timetable__time">{time}</span>
+              <span className="performance-timetable__name">{name}</span>
+            </button>
           </li>
         ))}
       </ol>

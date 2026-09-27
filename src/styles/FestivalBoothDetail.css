@@ -1,0 +1,12 @@
+.festival-booth-description {
+  margin: 0;
+  padding: calc(var(--u) * 4) 0 0 calc(var(--u) * 7);
+  color: var(--booth-text);
+  font-family: Galmuri11, Galmuri9, sans-serif;
+  font-size: calc(var(--u) * 13);
+  line-height: 1.8;
+  letter-spacing: -0.02em;
+  white-space: pre-line;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}

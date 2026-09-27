@@ -1,193 +1,122 @@
-@font-face {
-  font-family: Galmuri9;
-  src: url("../assets/Galmuri9.woff2") format("woff2");
-  font-display: swap;
-}
-
-.performance-detail {
-  position: relative;
-  width: 394px;
-  height: 852px;
-  flex: none;
-  overflow: hidden;
-  background-size: 394px 852px;
-  background-repeat: no-repeat;
+/* 수정: 공연 내용만 공통 팝업 위치에 맞춰 배치합니다. */
+.performance-detail__content {
+  position: absolute;
+  top: calc(var(--u) * 114);
+  left: calc(var(--u) * 27.75);
+  width: calc(var(--u) * 341.864);
+  height: calc(var(--u) * 654);
   font-family: Galmuri9, sans-serif;
   color: #111;
 }
 
-.performance-detail * {
+.performance-detail__content * {
   box-sizing: border-box;
-}
-
-.performance-detail__header {
-  position: absolute;
-  z-index: 2;
-  inset: 61px 0 auto;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.performance-detail__header h1 {
-  margin: 0;
-  font:
-    400 20px/150% Galmuri9,
-    sans-serif;
-  letter-spacing: -0.5px;
-  text-align: center;
-}
-
-.performance-detail__nav {
-  position: absolute;
-  top: 0;
-  width: 36px;
-  height: 36px;
-  padding: 6px;
-  border: 0;
-  background: none;
-  cursor: pointer;
-}
-
-.performance-detail__nav img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.performance-detail__nav--back {
-  left: 16px;
-}
-
-.performance-detail__nav--home {
-  right: 16px;
-  padding: 0;
-}
-
-.performance-detail__popup {
-  position: absolute;
-  top: 117px;
-  left: 26px;
-  width: 341.864px;
-  height: 654px;
-}
-
-.performance-detail__frame {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
 }
 
 .performance-detail__music {
   position: absolute;
-  top: 39px;
-  left: 17px;
-  width: 117.678px;
-  height: 53px;
+  top: calc(var(--u) * 39);
+  left: calc(var(--u) * 17);
+  width: calc(var(--u) * 117.678);
+  height: calc(var(--u) * 53);
 }
 
 .performance-detail__heading {
   position: absolute;
-  top: 59px;
+  top: calc(var(--u) * 59);
   left: 50%;
+  width: calc(var(--u) * 180);
   transform: translateX(-50%);
-  width: 180px;
   text-align: center;
 }
 
 .performance-detail__category {
-  margin: 0 0 8px;
-  font:
-    400 12px/180% Galmuri9,
-    sans-serif;
-  letter-spacing: -0.24px;
+  margin: 0 0 calc(var(--u) * 8);
+  font-size: calc(var(--u) * 12);
+  font-weight: 400;
+  line-height: 1.8;
+  letter-spacing: -0.02em;
 }
 
 .performance-detail__heading h2 {
   margin: 0;
-  font:
-    400 18px/150% Galmuri9,
-    sans-serif;
-  letter-spacing: -0.36px;
+  font-size: calc(var(--u) * 18);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
   overflow-wrap: break-word;
   white-space: pre-line;
 }
 
 .performance-detail__photo {
   position: absolute;
-  top: 190px;
-  left: 61px;
-  width: 220px;
-  height: 170px;
+  top: calc(var(--u) * 190);
+  left: calc(var(--u) * 61);
+  width: calc(var(--u) * 220);
+  height: calc(var(--u) * 170);
   object-fit: contain;
-  border-radius: 16px;
+  border-radius: calc(var(--u) * 16);
 }
 
-/* 이즈나·세이마이네임·체리필터·스테이씨 사진의 피그마 크기 */
+/* 피그마에서 가로 255px로 표시하는 네 공연 사진입니다. */
 .performance-detail__photo--wide {
-  left: 43.432px;
-  width: 255px;
-  height: 170px;
+  left: calc(var(--u) * 43.432);
+  width: calc(var(--u) * 255);
 }
 
 .performance-detail__info-title {
   position: absolute;
-  top: 440px;
-  left: 55px;
+  top: calc(var(--u) * 440);
+  left: calc(var(--u) * 55);
   margin: 0;
-  font:
-    400 15px/150% Galmuri9,
-    sans-serif;
-  letter-spacing: -0.3px;
+  font-size: calc(var(--u) * 15);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
 }
 
 .performance-detail__dancers {
   position: absolute;
-  top: 391px;
-  right: 32px;
-  width: 140px;
-  height: 75px;
+  top: calc(var(--u) * 391);
+  right: calc(var(--u) * 32);
+  width: calc(var(--u) * 140);
+  height: calc(var(--u) * 75);
   object-fit: contain;
 }
 
 .performance-detail__info {
   position: absolute;
-  top: 466px;
-  left: 48px;
-  width: 260px;
-  height: 115px;
+  top: calc(var(--u) * 466);
+  left: calc(var(--u) * 48);
+  width: calc(var(--u) * 260);
+  height: calc(var(--u) * 115);
   margin: 0;
-  padding: 8px 16px;
+  padding: calc(var(--u) * 8) calc(var(--u) * 16);
   border: 0.5px solid #838383;
-  border-radius: 10px;
+  border-radius: calc(var(--u) * 10);
   background: rgba(255, 255, 255, 0.6);
-  font:
-    400 11px/220% Galmuri9,
-    sans-serif;
-  letter-spacing: -0.22px;
+  font-size: calc(var(--u) * 11);
+  line-height: 2.2;
+  letter-spacing: -0.02em;
 }
 
 .performance-detail__info > div {
   display: flex;
-  height: 24.2px;
   align-items: center;
-  gap: 12px;
+  gap: calc(var(--u) * 12);
+  height: calc(var(--u) * 24.2);
 }
 
 .performance-detail__info dt {
   display: flex;
-  width: 13px;
-  flex: none;
   align-items: center;
+  width: calc(var(--u) * 13);
+  flex: none;
 }
 
 .performance-detail__info dt img {
   display: block;
-  width: 13px;
+  width: 100%;
   height: auto;
 }
 
@@ -198,9 +127,10 @@
 
 .performance-detail__message {
   position: absolute;
-  top: 280px;
+  top: calc(var(--u) * 280);
   width: 100%;
-  padding: 0 24px;
+  margin: 0;
+  padding: 0 calc(var(--u) * 24);
+  font-size: calc(var(--u) * 13);
   text-align: center;
-  font-size: 13px;
 }
