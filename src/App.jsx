@@ -44,7 +44,7 @@ function App() {
 
               {/* 공연 상세 */}
               <Route
-                path="/performance/:day/:index"
+                path="/performance/:performanceId"
                 element={<PerformanceDetail />}
               />
 
