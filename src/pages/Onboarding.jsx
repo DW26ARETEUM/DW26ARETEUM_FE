@@ -149,7 +149,7 @@ export default function Onboarding() {
 
   function advanceStory() {
     if (storyStep === story.length - 1) {
-      navigate("/home");
+      navigate("/");
       return;
     }
     setStoryStep((step) => (step === null ? 0 : step + 1));

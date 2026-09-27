@@ -1,7 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import "./styles/App.css";
-
 import Home from "./pages/Home.jsx";
 import BoothAllPage from "./pages/BoothAllPage.jsx";
 import BoothDetailPage from "./pages/BoothDetailPage.jsx";
