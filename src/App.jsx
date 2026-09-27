@@ -16,6 +16,7 @@ import Timetable from "./pages/Timetable.jsx";
 import BoothMap from "./pages/BoothMap.jsx";
 import Somnema from "./pages/Somnema.jsx";
 import SomTalk from "./pages/SomTalk.jsx";
+import Credits from "./pages/Credits.jsx";
 
 function App() {
   return (
@@ -77,6 +78,8 @@ function App() {
               <Route path="/som-talk" element={<SomTalk />} />
               {/* 타임테이블 */}
               <Route path="/timetable" element={<Timetable />} />
+              {/* 만든이들 */}
+              <Route path="/credits" element={<Credits />} />
 
               {/* 존재하지 않는 주소는 홈으로 이동 */}
               <Route path="*" element={<Navigate to="/" replace />} />
