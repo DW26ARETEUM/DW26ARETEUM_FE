@@ -134,3 +134,9 @@
   font-size: calc(var(--u) * 13);
   text-align: center;
 }
+
+/* 추가: 공연 상세 화면에서만 공통 header 마진을 제거합니다. */
+.booth-detail:has(.performance-detail__content) .booth-detail__header {
+  margin: 0;
+  padding: 0;
+}
