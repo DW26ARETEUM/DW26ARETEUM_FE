@@ -12,6 +12,7 @@ import SomCollectionDetail from "./pages/SomCollectionDetail.jsx";
 import FestivalBoothDetail from "./pages/FestivalBoothDetail.jsx";
 import BarDetail from "./pages/BarDetail.jsx";
 import GeneralBoothDetail from "./pages/GeneralBoothDetail.jsx";
+import Timetable from "./pages/Timetable.jsx";
 import BoothMap from "./pages/BoothMap.jsx";
 import Somnema from "./pages/Somnema.jsx";
 import SomTalk from "./pages/SomTalk.jsx";
@@ -70,12 +71,12 @@ function App() {
 
               {/* 부스 지도 */}
               <Route path="/booth-map" element={<BoothMap />} />
-
               {/* 솜네마 */}
               <Route path="/somnema" element={<Somnema />} />
-
               {/* 솜톡 */}
               <Route path="/som-talk" element={<SomTalk />} />
+              {/* 타임테이블 */}
+              <Route path="/timetable" element={<Timetable />} />
 
               {/* 존재하지 않는 주소는 홈으로 이동 */}
               <Route path="*" element={<Navigate to="/" replace />} />

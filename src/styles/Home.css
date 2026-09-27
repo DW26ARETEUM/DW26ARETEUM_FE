@@ -64,7 +64,7 @@
 }
 
 /* 구름 위치 (%) */
-.booth-info {
+.booth-info-btn {
   width: 37cqw;
   height: 19.25cqw;
 
@@ -72,7 +72,7 @@
   left: 12%;
 }
 
-.booth-map {
+.booth-map-btn {
   width: 46.46cqw;
   height: 24.17cqw;
 
@@ -80,7 +80,7 @@
   left: 45%;
 }
 
-.timetable {
+.timetable-btn {
   width: 36.64cqw;
   height: 20.14cqw;
 
@@ -88,7 +88,7 @@
   left: 9%;
 }
 
-.somnema {
+.somnema-btn {
   width: 34.45cqw;
   height: 17.92cqw;
 
@@ -96,7 +96,7 @@
   left: 52%;
 }
 
-.som-talk {
+.som-talk-btn {
   width: 32.42cqw;
   height: 16.87cqw;
 
@@ -104,7 +104,7 @@
   left: 20%;
 }
 
-.credits {
+.credits-btn {
   width: 29.48cqw;
   height: 15.34cqw;
 

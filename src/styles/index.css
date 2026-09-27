@@ -15,6 +15,27 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Galmuri11";
+  src: url("../assets/Galmuri11.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "GalmuriMono11";
+  src: url("../assets/GalmuriMono11.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Galmuri14";
+  src: url("../assets/Galmuri14.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
