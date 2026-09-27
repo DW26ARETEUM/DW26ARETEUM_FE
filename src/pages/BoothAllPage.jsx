@@ -21,7 +21,7 @@ import { booths29 } from "../data/booths29.js";
 import { booths30 } from "../data/booths30.js";
 import { searchBooths } from "../services/boothSearch.js";
 
-import "./BoothAllPage.css";
+import "../styles/BoothAllPage.css";
 
 const categories = [
   "전체",
