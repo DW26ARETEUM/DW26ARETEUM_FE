@@ -37,7 +37,10 @@ function App() {
               <Route path="/booths/:boothId" element={<BoothDetailPage />} />
 
               {/* 푸드트럭 상세 */}
-              <Route path="/foodtruck/detail" element={<FoodTruckDetail />} />
+              <Route
+                path="/foodtruck/detail/:day/:boothId"
+                element={<FoodTruckDetail />}
+              />
 
               {/* 공연 시간표 */}
               <Route
