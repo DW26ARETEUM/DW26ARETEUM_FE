@@ -17,6 +17,7 @@ import BoothMap from "./pages/BoothMap.jsx";
 import Somnema from "./pages/Somnema.jsx";
 import SomTalk from "./pages/SomTalk.jsx";
 import Credits from "./pages/Credits.jsx";
+import Onboarding from "./pages/Onboarding.jsx";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <div className="app-content">
             <Routes>
               {/* 홈 */}
+              <Route path="/onboarding" element={<Onboarding />} />
               <Route path="/" element={<Home />} />
 
               {/* 부스 소개 메인 */}
