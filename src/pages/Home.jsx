@@ -16,7 +16,7 @@ export default function Home() {
       <nav className="menu-container">
         <button
           className="cloud-btn booth-info-btn"
-          onClick={() => navigate("/booth-info")}
+          onClick={() => navigate("/booths")}
         >
           부스소개
         </button>

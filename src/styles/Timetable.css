@@ -17,6 +17,57 @@
 .back-button {
   width: 40px;
   height: 40px;
+
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+
+  margin-left: 26.18px;
+}
+
+header {
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  background-color: transparent;
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-family: Galmuri9, sans-serif;
+
+  display: flex; /* 1. 가로 배치 */
+  justify-content: space-between; /* 2. 양쪽 끝으로 요소 배치 */
+  align-items: center;
+
+  margin-top: 64px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  color: #111;
+  text-align: center;
+  font-family: Galmuri9;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 30px */
+  letter-spacing: -0.4px;
+
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* 정확히 가운데 정렬 */
+
+  pointer-events: none;
+}
+
+.date-tab-container {
+  display: flex; /* 1. 가로 배치 */
+  justify-content: center; /* 2. 가운데 정렬 */
+  align-items: center;
+
+  gap: 20px;
 }
 
 .cloud-tab {
@@ -26,15 +77,20 @@
   background-position: center;
   background-color: transparent;
 
+  width: 105px;
+  height: 81px;
+
   border: none;
   cursor: pointer;
-  color: #000;
+
+  color: #111;
+  font-family: Galmuri9;
+  font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: 150%; /* 27px */
-  letter-spacing: -0.36px;
-
-  padding-top: 2cqw;
+  line-height: 150%; /* 24px */
+  letter-spacing: -0.32px;
+  padding-bottom: 1cqw;
 
   transition: transform 0.05s ease-in-out;
 }
