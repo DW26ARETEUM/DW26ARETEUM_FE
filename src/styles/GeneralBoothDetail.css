@@ -51,3 +51,15 @@
   font-size: calc(var(--u) * 16);
   letter-spacing: calc(var(--u) * -0.32);
 }
+/* 수정: 일반부스 제목을 피그마의 글자 크기로 표시하고 줄바꿈을 유지합니다. */
+.general-booth-detail-page .booth-detail-heading__title {
+  color: #111;
+  text-align: center;
+  font-family: Galmuri9;
+  font-size: calc(var(--u) * 18);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: calc(var(--u) * -0.36);
+  white-space: pre-line;
+}

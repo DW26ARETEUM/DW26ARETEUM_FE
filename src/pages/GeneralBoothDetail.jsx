@@ -12,6 +12,19 @@ import BoothDetailHeading from "../components/boothDetail/BoothDetailHeading.jsx
 import BoothBasicInfo from "../components/boothDetail/BoothBasicInfo.jsx";
 import BoothDetailPanel from "../components/boothDetail/BoothDetailPanel.jsx";
 
+// 추가: 피그마에서 두 줄로 표시한 일반부스 제목만 줄바꿈합니다.
+function formatGeneralBoothTitle(name) {
+  if (name.startsWith("외계인침공 시")) {
+    return name.replace(/^(외계인침공 시)\s*/, "$1\n");
+  }
+
+  if (name.startsWith("아레테움 온에어")) {
+    return name.replace(/^(아레테움 온에어)\s*/, "$1\n");
+  }
+
+  return name;
+}
+
 // 추가: 위치명이 이미 번호를 포함하면 선택 날짜의 지도 번호로 교체합니다.
 function getLocationText(locationName, mapNumber) {
   if (mapNumber == null) return locationName;
@@ -144,7 +157,12 @@ export default function GeneralBoothDetail({ onBack, onHome }) {
       <BoothDetailLayout
         onBack={onBack}
         onHome={onHome}
-        heading={<BoothDetailHeading category="일반 부스" title={booth.name} />}
+        heading={
+          <BoothDetailHeading
+            category="일반 부스"
+            title={formatGeneralBoothTitle(booth.name)}
+          />
+        }
         basicInfo={
           <BoothBasicInfo
             date={schedule.date}
