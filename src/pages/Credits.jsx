@@ -242,24 +242,26 @@ function CreditsMates() {
           </div>
         </section>
       ))}
-      <a
-        className="credits-team__button credits-team__button--university"
-        href="https://www.instagram.com/likelion.univ/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <img src={lionButton} alt="" />
-        <span>멋사 대학 인스타그램</span>
-      </a>
-      <a
-        className="credits-team__button credits-team__button--dongduk"
-        href="https://www.instagram.com/likelion_dongduk/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <img src={dwuLionButton} alt="" />
-        <span>동덕 멋사 인스타그램</span>
-      </a>
+      <div className="credits-team__buttons">
+        <a
+          className="credits-team__button credits-team__button--university"
+          href="https://www.instagram.com/likelion.univ/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src={lionButton} alt="" />
+          <span>멋사 대학 인스타그램</span>
+        </a>
+        <a
+          className="credits-team__button credits-team__button--dongduk"
+          href="https://www.instagram.com/likelion_dongduk/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src={dwuLionButton} alt="" />
+          <span>동덕 멋사 인스타그램</span>
+        </a>
+      </div>
     </div>
   );
 }
