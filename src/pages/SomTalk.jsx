@@ -53,7 +53,7 @@ export default function SomTalk() {
   const [hasMoreOlder, setHasMoreOlder] = useState(false); // 옛날 글이 더 있는지
   const [reloadCount, setReloadCount] = useState(0);
   const [isWriting, setIsWriting] = useState(false);
-  // 추가: 내 글 등록 후 무조건 맨 아래로 보내는 신호
+  // 내 글 등록 후 무조건 맨 아래로 보내는 신호
   const [scrollToBottomCount, setScrollToBottomCount] = useState(0);
 
   // SSE 이벤트 안에서 "지금 보는 탭/검색어"를 알기 위한 값
@@ -86,7 +86,7 @@ export default function SomTalk() {
         stickToBottomRef.current = true;
         scrollAnchorRef.current = null;
         setMessages(data);
-        // 50개 꽉 차게 왔으면 옛날 글이 더 있을 수 있음 (검색은 제외)
+        // 꽉 차게 왔으면 옛날 글이 더 있을 수 있음 (검색은 제외)
         setHasMoreOlder(!searchKeyword && data.length === SOMTALK_PAGE_SIZE);
         setHasLoadError(false);
       })
@@ -208,7 +208,8 @@ export default function SomTalk() {
   }, [appendMessages, recoverMissedMessages]);
 
   // 맨 위 글보다 옛날 글 불러와서 위에 붙이기
-  const loadOlderMessages = async () => {
+  // 추가: 자동 불러오기에서도 쓰려고 useCallback으로 감쌈
+  const loadOlderMessages = useCallback(async () => {
     const list = messagesRef.current;
     if (!list || !messages?.length || isLoadingOlderRef.current) return;
 
@@ -245,7 +246,15 @@ export default function SomTalk() {
     } finally {
       isLoadingOlderRef.current = false;
     }
-  };
+  }, [messages, selectedTab]);
+
+  // 추가: 글이 적어서 화면이 다 안 차면 스크롤이 안 생기니까,
+  // 옛날 글이 더 있으면 화면이 찰 때까지 자동으로 더 불러오기
+  useEffect(() => {
+    const list = messagesRef.current;
+    if (!list || searchKeyword || !hasMoreOlder) return;
+    if (list.scrollHeight <= list.clientHeight) loadOlderMessages();
+  }, [messages, searchKeyword, hasMoreOlder, loadOlderMessages]);
 
   // 맨 위 근처까지 스크롤하면 옛날 글 불러오기
   const handleMessagesScroll = () => {
@@ -262,6 +271,7 @@ export default function SomTalk() {
     const { value } = event.target;
     setKeyword(value);
 
+    // TODO(기디): 검색 종료 방법 확정되면 수정 (지금은 검색창을 비우면 목록으로)
     if (!value.trim()) setSearchKeyword("");
   };
 
@@ -278,7 +288,7 @@ export default function SomTalk() {
     setIsWriting(false);
     appendMessages([savedMessage]);
 
-    // 추가: SSE로 먼저 들어온 경우에도 내 글은 무조건 맨 아래로
+    // SSE로 먼저 들어온 경우에도 내 글은 무조건 맨 아래로
     stickToBottomRef.current = true;
     setScrollToBottomCount((count) => count + 1);
   };
