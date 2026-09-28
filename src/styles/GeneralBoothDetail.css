@@ -1,4 +1,16 @@
-/* 추가: 아직 제공되지 않은 정보에 대한 임시 안내 문구입니다. */
+/* 추가: 구분용 부모는 화면 배치에 영향을 주지 않습니다. */
+.general-booth-detail-page {
+  display: contents;
+}
+
+/* 추가: 일반부스 상세의 공통 헤더에만 여백 0을 적용합니다. */
+.general-booth-detail-page .booth-detail__header,
+.general-booth-detail-page .booth-detail__title {
+  margin: 0;
+  padding: 0;
+}
+
+/* 기존 문구 자리에서 상태 또는 소개글을 표시합니다. */
 .general-booth-detail__message {
   margin: 18px 0 0;
   color: #525252;

@@ -30,6 +30,8 @@
   justify-content: center;
   width: 100%;
   height: 46px;
+  margin: 0;
+  padding: 0;
 }
 
 .performance-timetable__header h1 {
@@ -335,4 +337,13 @@
   bottom: 0;
   width: 393px;
   height: auto;
+}
+/* 추가: 목록 로딩·오류·빈 목록 안내를 공연 영역에 표시합니다. */
+.performance-timetable__status {
+  position: absolute;
+  top: 230px;
+  left: 0;
+  width: 100%;
+  color: #111;
+  text-align: center;
 }

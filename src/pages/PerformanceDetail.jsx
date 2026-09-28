@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../styles/PerformanceDetail.css";
+import { getPerformance, hasPerformanceApi } from "../api/performanceApi.js";
 import BoothDetailLayout from "../components/boothDetail/BoothDetailLayout.jsx";
 import musicStaff from "../assets/images/booth/musicStaff.svg";
 import dancers from "../assets/images/booth/dancers.svg";
@@ -13,162 +15,33 @@ const imageFiles = import.meta.glob(
   { eager: true, query: "?url", import: "default" },
 );
 
-// 현재는 화면 확인용 데이터입니다. 공연타임테이블과 같은 순서입니다.
-// 피그마와 제목이 다른 공연에는 displayTitle을 사용합니다.
-// 전유진과 박기영에는 상단 표시용 categoryLabel을 사용합니다.
-// TODO(백엔드 완료 후): 제목·날짜·시간·분류·출연자·장소를 상세 API 응답으로 교체합니다.
-// TODO(백엔드 완료 후): ID가 안정적으로 유지되는지 확인한 뒤 사진을 ID 기준으로 연결합니다.
-const previewPerformances = {
-  29: [
-    {
-      title: "한소리",
-      startTime: "18:05",
-      endTime: "18:30",
-      category: "CLUB",
-      performer: "동아리_한소리",
-      imageFile: "29-hansori.png",
-    },
-    {
-      title: "김명현",
-      startTime: "18:34",
-      endTime: "18:45",
-      category: "EVENT",
-      performer: "일반_김명현",
-      imageFile: "29-kim-myeonghyeon.png",
-    },
-    {
-      title: "2003년 6월에 생긴 일",
-      startTime: "18:48",
-      endTime: "19:03",
-      category: "EVENT",
-      performer: "일반_2003년 6월에 생긴 일",
-      imageFile: "29-2003-june.png",
-    },
-    {
-      title: "합정동 평화유지연합회",
-      displayTitle: "합정동\n평화유지연합회",
-      startTime: "19:08",
-      endTime: "19:25",
-      category: "EVENT",
-      performer: "일반_합정동 평화유지연합회",
-      imageFile: "29-hapjeongdong.png",
-    },
-    {
-      title: "전유진",
-      startTime: "19:30",
-      endTime: "19:50",
-      category: "ARTIST",
-      categoryLabel: "스페셜 스테이지",
-      performer: "스페셜 스테이지_전유진",
-      imageFile: "29-jeon-yujin.png",
-    },
-    {
-      title: "세이마이네임",
-      displayTitle: "SAY MY NAME\n세이마이네임",
-      startTime: "20:00",
-      endTime: "20:30",
-      category: "ARTIST",
-      performer: "아티스트_세이마이네임",
-      imageFile: "29-say-my-name.png",
-    },
-    {
-      title: "이즈나",
-      displayTitle: "izna\n이즈나",
-      startTime: "20:35",
-      endTime: "21:05",
-      category: "ARTIST",
-      performer: "아티스트_이즈나",
-      imageFile: "29-izna.png",
-    },
-    {
-      title: "윤하",
-      displayTitle: "Younha\n윤하",
-      startTime: "21:10",
-      endTime: "21:50",
-      category: "ARTIST",
-      performer: "아티스트_윤하",
-      imageFile: "29-younha.png",
-    },
-  ],
-  30: [
-    {
-      title: "소울엔지",
-      startTime: "18:05",
-      endTime: "18:25",
-      category: "CLUB",
-      performer: "동아리_소울엔지",
-      imageFile: "30-soul-ng.png",
-    },
-    {
-      title: "엑스터시",
-      startTime: "18:30",
-      endTime: "18:50",
-      category: "CLUB",
-      performer: "동아리_엑스터시",
-      imageFile: "30-extasy.png",
-    },
-    {
-      title: "얼사랑",
-      startTime: "18:55",
-      endTime: "19:15",
-      category: "CLUB",
-      performer: "동아리_얼사랑",
-      imageFile: "30-ullove.png",
-    },
-    {
-      title: "오월",
-      startTime: "19:20",
-      endTime: "19:30",
-      category: "EVENT",
-      performer: "일반_오월",
-      imageFile: "30-may.png",
-    },
-    {
-      title: "박기영",
-      startTime: "19:30",
-      endTime: "19:50",
-      category: "ARTIST",
-      categoryLabel: "스페셜 스테이지",
-      performer: "스페셜 스테이지_박기영",
-      imageFile: "30-park-kiyoung.png",
-    },
-    {
-      title: "체리필터",
-      displayTitle: "CherryFilter\n체리필터",
-      startTime: "20:05",
-      endTime: "20:40",
-      category: "ARTIST",
-      performer: "아티스트_체리필터",
-      imageFile: "30-cherry-filter.png",
-    },
-    {
-      title: "청하",
-      displayTitle: "CHUNG HA\n청하",
-      startTime: "20:45",
-      endTime: "21:20",
-      category: "ARTIST",
-      performer: "아티스트_청하",
-      imageFile: "30-chungha.png",
-    },
-    {
-      title: "스테이씨",
-      displayTitle: "STAYC\n스테이씨",
-      startTime: "21:25",
-      endTime: "22:00",
-      category: "ARTIST",
-      performer: "아티스트_스테이씨",
-      imageFile: "30-stayc.png",
-    },
-  ],
-};
-
+// 수정: API 명세서의 공연 분류를 화면 문구로 바꿉니다.
 const categoryLabels = {
-  ARTIST: "아티스트",
+  GENERAL: "일반 공연",
   CLUB: "동아리 공연",
-  EVENT: "일반 공연",
+  SPECIAL: "스페셜 스테이지",
+  ARTIST: "아티스트",
 };
 
-const stagePreview = "동덕여대 동인관 체육관";
+// 추가: 공연 ID와 프론트 사진의 연결입니다. 배포 후 실제 ID를 대조합니다.
+const imageFileById = {
+  1: "29-hansori.png",
+  2: "29-kim-myeonghyeon.png",
+  3: "29-2003-june.png",
+  4: "29-hapjeongdong.png",
+  5: "29-jeon-yujin.png",
+  6: "29-say-my-name.png",
+  7: "29-izna.png",
+  8: "29-younha.png",
+  9: "30-soul-ng.png",
+  10: "30-extasy.png",
+  11: "30-ullove.png",
+  12: "30-may.png",
+  13: "30-park-kiyoung.png",
+  14: "30-cherry-filter.png",
+  15: "30-chungha.png",
+  16: "30-stayc.png",
+};
 
 // 피그마 기준 255×170px로 표시하는 사진입니다.
 const widePhotoFiles = new Set([
@@ -178,23 +51,84 @@ const widePhotoFiles = new Set([
   "30-stayc.png",
 ]);
 
-// URL의 day와 index로 공연을 선택하고 공통 상세 레이아웃에 표시합니다.
-// TODO(백엔드 완료 후): 공연 ID로 상세 API를 호출하도록 변경합니다.
-export default function PerformanceDetail({
-  day: dayProp,
-  index: indexProp,
-  onBack,
-  onHome,
-}) {
-  const { day: routeDay, index: routeIndex } = useParams();
-  const day = Number(dayProp ?? routeDay ?? 29);
-  const index = Number(indexProp ?? routeIndex ?? 0);
-  const performance = previewPerformances[day]?.[index];
+// 수정: URL의 공연 고유 ID로 상세 API를 조회합니다.
+export default function PerformanceDetail({ onBack, onHome }) {
+  const { performanceId } = useParams();
+  const id = Number(performanceId);
+  const isValidId = Number.isInteger(id) && id > 0;
 
-  const imagePath = performance
-    ? `../assets/images/booth/performances/${performance.imageFile}`
+  // 수정: 응답이 어느 공연 ID의 것인지 함께 저장합니다.
+  const [requestResult, setRequestResult] = useState({
+    performanceId: null,
+    data: null,
+    status: "loading",
+    message: "",
+  });
+
+  useEffect(() => {
+    // 추가: 서버 주소가 없거나 ID가 잘못되었으면 요청하지 않습니다.
+    if (!hasPerformanceApi || !isValidId) return;
+
+    const controller = new AbortController();
+
+    getPerformance(id, controller.signal)
+      .then((data) => {
+        if (!data || typeof data !== "object" || Array.isArray(data)) {
+          throw new Error("공연 상세 응답 형식이 올바르지 않습니다.");
+        }
+
+        if (controller.signal.aborted) return;
+
+        setRequestResult({
+          performanceId,
+          data,
+          status: "success",
+          message: "",
+        });
+      })
+      .catch((error) => {
+        if (controller.signal.aborted || error.name === "AbortError") return;
+
+        setRequestResult({
+          performanceId,
+          data: null,
+          status:
+            error.status === 404 || error.code === "PERFORMANCE_NOT_FOUND"
+              ? "notFound"
+              : "error",
+          message: error.message,
+        });
+      });
+
+    // 추가: 다른 공연으로 이동하면 이전 요청을 취소합니다.
+    return () => controller.abort();
+  }, [performanceId, id, isValidId]);
+
+  // 추가: 이전 공연의 응답은 현재 공연 상세에 표시하지 않습니다.
+  const currentResult =
+    requestResult.performanceId === performanceId ? requestResult : null;
+  const status = !isValidId
+    ? "notFound"
+    : !hasPerformanceApi
+      ? "unconfigured"
+      : (currentResult?.status ?? "loading");
+  const performance = status === "success" ? currentResult.data : null;
+  const errorMessage = currentResult?.message ?? "";
+
+  const day = performance
+    ? Number(performance.performanceDate.slice(8, 10))
+    : null;
+
+  const imageFile = performance ? imageFileById[performance.id] : null;
+  const imagePath = imageFile
+    ? `../assets/images/booth/performances/${imageFile}`
     : null;
   const image = imagePath ? imageFiles[imagePath] : null;
+
+  // 추가: 영문 공연명이 있으면 기존 제목 영역에 함께 표시합니다.
+  const displayTitle = performance?.titleEn
+    ? `${performance.titleEn}\n${performance.title}`
+    : performance?.title;
 
   return (
     <BoothDetailLayout
@@ -203,8 +137,16 @@ export default function PerformanceDetail({
       onHome={onHome}
       basicInfo={
         <div className="performance-detail__content">
-          {!performance ? (
-            <p className="performance-detail__message">공연 정보가 없습니다.</p>
+          {status !== "success" ? (
+            <p className="performance-detail__message" aria-live="polite">
+              {status === "unconfigured"
+                ? "공연 서버 연결을 준비 중입니다."
+                : status === "loading"
+                  ? "공연 정보를 불러오는 중입니다."
+                  : status === "notFound"
+                    ? "공연 정보가 없습니다."
+                    : errorMessage}
+            </p>
           ) : (
             <>
               <img
@@ -216,16 +158,15 @@ export default function PerformanceDetail({
 
               <div className="performance-detail__heading">
                 <p className="performance-detail__category">
-                  {performance.categoryLabel ||
-                    categoryLabels[performance.category]}
+                  {categoryLabels[performance.category] ?? performance.category}
                 </p>
-                <h2>{performance.displayTitle || performance.title}</h2>
+                <h2>{displayTitle}</h2>
               </div>
 
               {image && (
                 <img
                   className={`performance-detail__photo${
-                    widePhotoFiles.has(performance.imageFile)
+                    widePhotoFiles.has(imageFile)
                       ? " performance-detail__photo--wide"
                       : ""
                   }`}
@@ -264,7 +205,7 @@ export default function PerformanceDetail({
                   <dt>
                     <img src={locationIcon} alt="장소" />
                   </dt>
-                  <dd>{stagePreview}</dd>
+                  <dd>{performance.stage}</dd>
                 </div>
 
                 <div>

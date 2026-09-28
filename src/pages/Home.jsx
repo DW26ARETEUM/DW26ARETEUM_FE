@@ -15,37 +15,37 @@ export default function Home() {
 
       <nav className="menu-container">
         <button
-          className="cloud-btn booth-info"
+          className="cloud-btn booth-info-btn"
           onClick={() => navigate("/booths")}
         >
           부스소개
         </button>
         <button
-          className="cloud-btn booth-map"
+          className="cloud-btn booth-map-btn"
           onClick={() => navigate("/booth-map")}
         >
           부스배치도
         </button>
         <button
-          className="cloud-btn timetable"
+          className="cloud-btn timetable-btn"
           onClick={() => navigate("/timetable")}
         >
           타임테이블
         </button>
         <button
-          className="cloud-btn somnema"
+          className="cloud-btn somnema-btn"
           onClick={() => navigate("/somnema")}
         >
           솜네마
         </button>
         <button
-          className="cloud-btn som-talk"
+          className="cloud-btn som-talk-btn"
           onClick={() => navigate("/som-talk")}
         >
           솜톡
         </button>
         <button
-          className="cloud-btn credits"
+          className="cloud-btn credits-btn"
           onClick={() => navigate("/credits")}
         >
           만든이들

@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/PerformanceTimetable.css";
+import { getPerformances, hasPerformanceApi } from "../api/performanceApi.js";
 import background from "../assets/images/background/timetableBackground.png";
 import backButton from "../assets/images/backbtn.svg";
 import homeButton from "../assets/images/homebtn.svg";
@@ -17,37 +18,66 @@ import sparkle from "../assets/images/timetable/sparkle.svg";
 import timetableLogo from "../assets/images/timetable/timetableLogo.svg";
 import skyline from "../assets/images/timetable/skyline.svg";
 
-// 날짜별 공연 정보를 표시합니다. 추후 API 응답으로 교체할 예정입니다.
-const performances = {
-  29: [
-    { time: "18:05 ~ 18:30", name: "한소리" },
-    { time: "18:34 ~ 18:45", name: "김명현" },
-    { time: "18:48 ~ 19:03", name: "2003년 6월에 생긴 일" },
-    { time: "19:08 ~ 19:25", name: "합정동 평화유지연합회" },
-    { time: "19:30 ~ 19:50", name: "전유진" },
-    { time: "20:00 ~ 20:30", name: "세이마이네임" },
-    { time: "20:35 ~ 21:05", name: "이즈나" },
-    { time: "21:10 ~ 21:50", name: "윤하" },
-  ],
-  30: [
-    { time: "18:05 ~ 18:25", name: "소울엔지" },
-    { time: "18:30 ~ 18:50", name: "엑스터시" },
-    { time: "18:55 ~ 19:15", name: "얼사랑" },
-    { time: "19:20 ~ 19:30", name: "오월" },
-    { time: "19:30 ~ 19:50", name: "박기영" },
-    { time: "20:05 ~ 20:40", name: "체리필터" },
-    { time: "20:45 ~ 21:20", name: "청하" },
-    { time: "21:25 ~ 22:00", name: "스테이씨" },
-  ],
-};
-
 // 연결선 이미지를 위에서 아래 순서대로 사용합니다.
 const lines = [line1, line2, line3, line4, line5, line6, line7];
 
-// 수정: 날짜별 공연을 표시하고, 선택한 공연의 상세 경로로 이동합니다.
+// 수정: 선택한 날짜의 공연 목록을 API에서 조회하고 읽기 전용으로 표시합니다.
 export default function PerformanceTimetable({ onBack, onHome }) {
   const navigate = useNavigate();
   const [selectedDay, setSelectedDay] = useState(29);
+
+  // 수정: 응답이 어느 날짜의 것인지 함께 저장합니다.
+  const [requestResult, setRequestResult] = useState({
+    day: null,
+    data: [],
+    status: "loading",
+    message: "",
+  });
+
+  useEffect(() => {
+    // 추가: 서버 주소를 설정하기 전에는 요청하지 않습니다.
+    if (!hasPerformanceApi) return;
+
+    const controller = new AbortController();
+
+    getPerformances(`2026-09-${selectedDay}`, controller.signal)
+      .then((data) => {
+        if (!Array.isArray(data)) {
+          throw new Error("공연 목록 응답 형식이 올바르지 않습니다.");
+        }
+
+        if (controller.signal.aborted) return;
+
+        setRequestResult({
+          day: selectedDay,
+          data,
+          status: "success",
+          message: "",
+        });
+      })
+      .catch((error) => {
+        if (controller.signal.aborted || error.name === "AbortError") return;
+
+        setRequestResult({
+          day: selectedDay,
+          data: [],
+          status: "error",
+          message: error.message,
+        });
+      });
+
+    // 추가: 날짜를 바꾸면 이전 날짜의 요청을 취소합니다.
+    return () => controller.abort();
+  }, [selectedDay]);
+
+  // 추가: 이전 날짜의 응답은 현재 날짜 화면에 표시하지 않습니다.
+  const currentResult =
+    requestResult.day === selectedDay ? requestResult : null;
+  const performances = currentResult?.data ?? [];
+  const status = !hasPerformanceApi
+    ? "unconfigured"
+    : (currentResult?.status ?? "loading");
+  const errorMessage = currentResult?.message ?? "";
 
   return (
     <main
@@ -115,24 +145,42 @@ export default function PerformanceTimetable({ onBack, onHome }) {
         ))}
       </div>
 
-      <ol className="performance-timetable__performances">
-        {performances[selectedDay].map(({ time, name }, index) => (
-          <li
-            key={`${selectedDay}-${time}-${name}`}
-            className={`performance-timetable__performance performance-timetable__performance--${index + 1}`}
-          >
-            {/* 추가: 현재 날짜와 공연 순서를 상세 페이지 주소로 전달합니다. */}
-            <button
-              type="button"
-              className="performance-timetable__performance-button"
-              onClick={() => navigate(`/performance/${selectedDay}/${index}`)}
-              aria-label={`9월 ${selectedDay}일 ${name} 공연 상세 보기`}
-            >
-              <span className="performance-timetable__time">{time}</span>
-              <span className="performance-timetable__name">{name}</span>
-            </button>
+      <ol className="performance-timetable__performances" aria-live="polite">
+        {status === "unconfigured" ? (
+          <li className="performance-timetable__status">
+            공연 서버 연결을 준비 중입니다.
           </li>
-        ))}
+        ) : status === "loading" ? (
+          <li className="performance-timetable__status">
+            공연 목록을 불러오는 중입니다.
+          </li>
+        ) : status === "error" ? (
+          <li className="performance-timetable__status">{errorMessage}</li>
+        ) : performances.length === 0 ? (
+          <li className="performance-timetable__status">
+            이 날짜에는 공연이 없습니다.
+          </li>
+        ) : (
+          performances.map((performance, index) => (
+            <li
+              key={performance.id}
+              className={`performance-timetable__performance performance-timetable__performance--${index + 1}`}
+            >
+              {/* 수정: 공연 항목은 상세로 이동하지 않는 읽기 전용 정보입니다. */}
+              <div
+                className="performance-timetable__performance-button"
+                style={{ cursor: "default" }}
+              >
+                <span className="performance-timetable__time">
+                  {performance.startTime} ~ {performance.endTime}
+                </span>
+                <span className="performance-timetable__name">
+                  {performance.title}
+                </span>
+              </div>
+            </li>
+          ))
+        )}
       </ol>
 
       <img
