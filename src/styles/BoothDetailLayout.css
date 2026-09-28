@@ -173,10 +173,20 @@
   font-size: calc(var(--u) * 18);
   line-height: 1.5;
   letter-spacing: -0.02em;
+  white-space: pre-line;
 }
 
 .booth-detail-heading--compact .booth-detail-heading__title {
   font-size: calc(var(--u) * 16);
+}
+
+.booth-detail-heading--long-title {
+  padding: 0 calc(var(--u) * 8);
+}
+
+.booth-detail-heading--long-title .booth-detail-heading__title {
+  font-size: calc(var(--u) * 12);
+  word-break: keep-all;
 }
 
 .booth-detail-heading__notice {
