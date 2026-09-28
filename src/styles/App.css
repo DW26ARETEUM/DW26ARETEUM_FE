@@ -55,3 +55,14 @@
     box-shadow: none;
   }
 }
+
+.pc-background:has(.onboarding),
+.mobile-frame:has(.onboarding) {
+  height: 100svh;
+}
+
+.mobile-content:has(.onboarding) {
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}

@@ -84,7 +84,7 @@ function Character({ src, x, y, direction, effect = false }) {
   );
 }
 
-export default function Onboarding() {
+export default function Onboarding({ onComplete }) {
   const navigate = useNavigate();
   const [storyStep, setStoryStep] = useState(null);
   const [motion, setMotion] = useState({
@@ -153,7 +153,7 @@ export default function Onboarding() {
   const activeStory = storyStep === null ? null : story[storyStep];
 
   function handleComplete() {
-    localStorage.setItem("hasSeenOnboarding", "true");
+    onComplete?.();
     navigate("/", { replace: true });
   }
 
