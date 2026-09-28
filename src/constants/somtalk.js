@@ -1,15 +1,14 @@
 // 솜톡 고정 데이터
 
-// TODO(API): value를 백엔드 카테고리 값과 맞추기
+// value: 백엔드 category 값 ("all"은 category를 안 보냄)
 export const SOMTALK_TABS = [
   { value: "all", label: "전체" },
-  { value: "chat", label: "잡담" },
-  { value: "info", label: "정보" },
+  { value: "CHAT", label: "잡담" },
+  { value: "INFO", label: "정보" },
 ];
 
 export const MAX_MESSAGE_LENGTH = 53;
 
-// TODO(기디): 빈 화면 문구 확정되면 수정 임시로 아무말 적음
 export const SOMTALK_EMPTY_TEXT = {
   search: {
     title: "검색 결과가 없어요!",
@@ -18,5 +17,9 @@ export const SOMTALK_EMPTY_TEXT = {
   list: {
     title: "아직 소식이 없어요!",
     description: "첫 번째 소식을 남겨보세요",
+  },
+  error: {
+    title: "메시지를 불러오지 못했어요",
+    description: "잠시 후 새로고침 해주세요",
   },
 };
