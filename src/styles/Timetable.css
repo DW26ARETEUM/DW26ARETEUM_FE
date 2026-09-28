@@ -3,9 +3,10 @@
   height: 100%;
   min-height: 100vh;
   background-image: url("../assets/images/background/background1.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: center top;
+  background-repeat: repeat-y;
+  overflow-x: clip;
   container-type: inline-size;
   display: flex;
   flex-direction: column;
@@ -428,8 +429,8 @@ header h1 {
 
 .dwu {
   z-index: 2;
-  width: 394px;
-  height: 106px;
+  width: min(394px, 100%);
+  height: auto;
 }
 
 .logo-wrapper {
