@@ -237,11 +237,19 @@ function BoothAllPage() {
     }
   };
 
+<<<<<<< HEAD
   /*
    * 찜은 날짜/cardIndex가 아니라 실제 booth.id 기준으로 관리.
    * 양일에 같은 booth.id가 있더라도 찜 목록에서는 하나만 표시.
    */
   const allBooths = [...booths29, ...booths30];
+=======
+  const favoriteBooths = favorites.map((favoriteKey) => {
+    const [date, cardIndex] = favoriteKey.split("-").map(Number);
+
+    return { favoriteKey, date, cardIndex };
+  });
+>>>>>>> 7baf611 (feat: 즐겨찾기 안내 문구 추가)
 
   const favoriteBooths = allBooths.filter(
     (booth, index, booths) =>
@@ -484,6 +492,7 @@ function BoothAllPage() {
             <img src={bookmarkEmpty} alt="저장된 부스가 없어요" />
           </div>
         ) : showFavorites ? (
+<<<<<<< HEAD
           <div className="favorite-booth-list">
             {favoriteBooths.map((booth) => (
               <BoothCard
@@ -493,6 +502,22 @@ function BoothAllPage() {
                 onToggleFavorite={toggleFavorite}
               />
             ))}
+=======
+          <div className="favorite-booth-section">
+            <p className="favorite-booth-guide">
+              찜한 부스는 날짜와 관계없이 모두 확인할 수 있어요.
+            </p>
+            <div className="favorite-booth-list">
+              {favoriteBooths.map(({ favoriteKey, date, cardIndex }) => (
+                <FavoriteCard
+                  key={favoriteKey}
+                  cardIndex={cardIndex}
+                  date={date}
+                  onToggleFavorite={toggleFavorite}
+                />
+              ))}
+            </div>
+>>>>>>> 7baf611 (feat: 즐겨찾기 안내 문구 추가)
           </div>
         ) : (
           <BoothListArtwork
