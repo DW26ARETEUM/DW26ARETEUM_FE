@@ -108,12 +108,13 @@ function CreditsAreteum() {
         <p className="credits-event__invite">비밀스런 초대에 응답해줘.</p>
       </div>
       <a
-        className="credits-team__button"
+        className="credits-team__button credits-team__button--image"
         href="https://www.instagram.com/ddwu_festival/"
         target="_blank"
         rel="noreferrer"
       >
-        축운위 인스타그램
+        <img src={dwuLionButton} alt="" />
+        <span>축운위 인스타그램</span>
       </a>
     </div>
   );
@@ -158,12 +159,13 @@ function CreditsTeam() {
         </p>
       </div>
       <a
-        className="credits-team__button"
+        className="credits-team__button credits-team__button--image"
         href="https://www.instagram.com/ddwu_festival/"
         target="_blank"
         rel="noreferrer"
       >
-        축운위 인스타그램
+        <img src={dwuLionButton} alt="" />
+        <span>축운위 인스타그램</span>
       </a>
     </div>
   );
@@ -242,24 +244,26 @@ function CreditsMates() {
           </div>
         </section>
       ))}
-      <a
-        className="credits-team__button credits-team__button--university"
-        href="https://www.instagram.com/likelion.univ/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <img src={lionButton} alt="" />
-        <span>멋사 대학 인스타그램</span>
-      </a>
-      <a
-        className="credits-team__button credits-team__button--dongduk"
-        href="https://www.instagram.com/likelion_dongduk/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <img src={dwuLionButton} alt="" />
-        <span>동덕 멋사 인스타그램</span>
-      </a>
+      <div className="credits-team__buttons">
+        <a
+          className="credits-team__button credits-team__button--university credits-team__button--image"
+          href="https://www.instagram.com/likelion.univ/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src={lionButton} alt="" />
+          <span>멋사 대학 인스타그램</span>
+        </a>
+        <a
+          className="credits-team__button credits-team__button--dongduk credits-team__button--image"
+          href="https://www.instagram.com/dongduk_likelion/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src={dwuLionButton} alt="" />
+          <span>동덕 멋사 인스타그램</span>
+        </a>
+      </div>
     </div>
   );
 }

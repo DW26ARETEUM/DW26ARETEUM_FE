@@ -90,6 +90,7 @@
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
+
 .credits-event__title-logo {
   display: block;
   width: calc(var(--u) * 190);
@@ -117,6 +118,7 @@
   letter-spacing: -0.015em;
   text-align: center;
   overflow-wrap: anywhere;
+  font-family: Galmuri14;
 }
 .credits-event__message p,
 .credits-copy p {
@@ -136,6 +138,7 @@
 .credits-copy em {
   color: #ff3288;
   font-style: normal;
+  font-family: Galmuri11;
 }
 .credits-committee__seal {
   display: flex;
@@ -166,26 +169,22 @@
   text-decoration: none;
   cursor: pointer;
 }
-.credits-panel--committee .credits-team__button {
-  margin-top: calc(var(--u) * 24);
-}
-.credits-panel--mates .credits-team__button {
+.credits-team__button--image {
   position: relative;
   width: min(100%, calc(var(--u) * 210));
   min-height: 0;
-  margin-top: calc(var(--u) * 10);
   padding: 0;
   border: 0;
   border-radius: 0;
   background: transparent;
   box-shadow: none;
 }
-.credits-panel--mates .credits-team__button img {
+.credits-team__button--image img {
   display: block;
   width: 100%;
   height: auto;
 }
-.credits-panel--mates .credits-team__button span {
+.credits-team__button--image span {
   position: absolute;
   inset: 0;
   display: flex;
@@ -195,8 +194,19 @@
   font: inherit;
   font-size: calc(var(--u) * 13);
 }
-.credits-panel--mates .credits-team__button--dongduk {
-  margin-top: calc(var(--u) * 8);
+.credits-panel--committee .credits-team__button {
+  margin-top: calc(var(--u) * 24);
+}
+.credits-team__buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--u) * 8);
+  width: 100%;
+  margin-top: calc(var(--u) * 34);
+}
+.credits-panel--mates .credits-team__button {
+  margin: 0 auto;
 }
 .credits-photo-frame {
   position: relative;
@@ -265,15 +275,16 @@
 }
 .credits-member__name {
   max-width: 100%;
-  color: #51494b;
   font-size: calc(var(--u) * 10);
   line-height: 1.45;
   word-break: keep-all;
   overflow-wrap: anywhere;
+  font-family: Galmuri14;
+  color: #000;
 }
 .credits-member__name span {
   display: block;
-  color: #777;
+  font-size: calc(var(--u) * 8);
 }
 .credits-section--design .credits-member-grid {
   grid-template-columns: repeat(6, minmax(0, 1fr));

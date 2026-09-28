@@ -19,7 +19,7 @@ import whiteButton from "../assets/images/onboarding/whtieBtn.png";
 
 const story = [
   {
-    text: "앗...! 야생의 솜솜이(가) 나타났다!",
+    text: "앗...! 야생의 솜솜이 (이)가 나타났다!",
     character: defaultSom,
     effect: false,
   },
@@ -27,6 +27,11 @@ const story = [
     text: "…… 오잉!? 솜솜이의 상태가 …… !!",
     character: defaultSom,
     effect: true,
+  },
+  {
+    text: "솜솜이 (이)가\n[ 축제솜 ] (으)로 진화했다 … !!",
+    character: transformedSom,
+    effect: false,
   },
   {
     text: "[다음으로] 버튼을 눌러 축제솜을\n우리의 축제로 데려가주세요!!",
@@ -90,9 +95,9 @@ export default function Onboarding() {
   });
 
   useEffect(() => {
-    if (storyStep === 1) {
+    if (storyStep === 1 || storyStep === 2) {
       const timeout = window.setTimeout(
-        () => setStoryStep(2),
+        () => setStoryStep(storyStep + 1),
         transformationDuration,
       );
       return () => window.clearTimeout(timeout);
@@ -147,9 +152,14 @@ export default function Onboarding() {
 
   const activeStory = storyStep === null ? null : story[storyStep];
 
+  function handleComplete() {
+    localStorage.setItem("hasSeenOnboarding", "true");
+    navigate("/", { replace: true });
+  }
+
   function advanceStory() {
     if (storyStep === story.length - 1) {
-      navigate("/");
+      handleComplete();
       return;
     }
     setStoryStep((step) => (step === null ? 0 : step + 1));
@@ -195,12 +205,12 @@ export default function Onboarding() {
 
       {activeStory ? (
         <section
-          className={`onboarding-dialog${storyStep === story.length - 1 ? " onboarding-dialog--final" : ""}`}
+          className={`onboarding-dialog${storyStep === 2 ? " onboarding-dialog--evolution" : ""}${storyStep === story.length - 1 ? " onboarding-dialog--final" : ""}`}
           aria-live="polite"
         >
           <img className="onboarding-dialog-frame" src={chatFrame} alt="" />
           <p className="onboarding-dialog-text">{activeStory.text}</p>
-          {!activeStory.effect && (
+          {!activeStory.effect && storyStep !== 2 && (
             <button
               className="onboarding-next"
               type="button"
@@ -216,7 +226,7 @@ export default function Onboarding() {
             <img src={whiteButton} alt="" />
             <span>스토리 보고 시작하기</span>
           </button>
-          <button type="button" onClick={() => navigate("/home")}>
+          <button type="button" onClick={handleComplete}>
             <img src={pinkButton} alt="" />
             <span>바로 시작하기</span>
           </button>

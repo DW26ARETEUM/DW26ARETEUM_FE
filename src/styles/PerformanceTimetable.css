@@ -347,3 +347,39 @@
   color: #111;
   text-align: center;
 }
+/* 추가: 29일 피그마 배치에 맞춰 지정한 공연의 시간과 제목을 함께 왼쪽으로 이동합니다. */
+.performance-timetable--29 .performance-timetable__performance--2,
+.performance-timetable--29 .performance-timetable__performance--6,
+.performance-timetable--29 .performance-timetable__performance--8 {
+  right: 120px;
+}
+
+.performance-timetable--29 .performance-timetable__performance--5,
+.performance-timetable--29 .performance-timetable__performance--7 {
+  left: 118px;
+}
+/* 추가: 30일 엑스터시·박기영·체리필터·스테이씨를 왼쪽으로 이동합니다. */
+.performance-timetable--30 .performance-timetable__performance--2,
+.performance-timetable--30 .performance-timetable__performance--6,
+.performance-timetable--30 .performance-timetable__performance--8 {
+  right: 120px;
+}
+
+.performance-timetable--30 .performance-timetable__performance--5 {
+  left: 118px;
+}
+
+/* 추가: 30일 청하를 오른쪽으로 이동합니다. */
+.performance-timetable--30 .performance-timetable__performance--7 {
+  left: 148px;
+}
+/* 수정: 세이마이네임과 체리필터 */
+.performance-timetable--29 .performance-timetable__performance--6,
+.performance-timetable--30 .performance-timetable__performance--6 {
+  right: 150px;
+}
+
+/* 수정: 이즈나를 오른쪽으로 10px 더 이동합니다. */
+.performance-timetable--29 .performance-timetable__performance--7 {
+  left: 148px;
+}

@@ -81,7 +81,7 @@ export default function PerformanceTimetable({ onBack, onHome }) {
 
   return (
     <main
-      className="performance-timetable"
+      className={`performance-timetable performance-timetable--${selectedDay}`}
       style={{ backgroundImage: `url(${background})` }}
     >
       <header className="performance-timetable__header">
