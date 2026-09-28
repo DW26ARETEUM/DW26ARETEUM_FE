@@ -1,19 +1,13 @@
-import { useParams } from "react-router-dom";
-import "../styles/FestivalBoothDetail.css";
-import BoothDetailLayout from "../components/boothDetail/BoothDetailLayout.jsx";
-import BoothDetailHeading from "../components/boothDetail/BoothDetailHeading.jsx";
+import useBoothDetail from "../api/useBoothDetail.js";
 import BoothBasicInfo from "../components/boothDetail/BoothBasicInfo.jsx";
+import BoothDetailHeading from "../components/boothDetail/BoothDetailHeading.jsx";
+import BoothDetailLayout from "../components/boothDetail/BoothDetailLayout.jsx";
 import BoothDetailPanel from "../components/boothDetail/BoothDetailPanel.jsx";
-import { FESTIVAL_BOOTHS } from "../mocks/festivalBooths.js";
 
-export default function FestivalBoothDetail({
-  boothId: boothIdProp = "1",
-  onBack,
-  onHome,
-}) {
-  const params = useParams();
-  const boothId = Number(params.boothId ?? boothIdProp);
-  const booth = FESTIVAL_BOOTHS.find(({ id }) => id === boothId);
+import "../styles/FestivalBoothDetail.css";
+
+export default function FestivalBoothDetail({ onBack, onHome }) {
+  const { booth, message, operation, schedule } = useBoothDetail("COMMITTEE");
 
   if (!booth) {
     return (
@@ -24,27 +18,27 @@ export default function FestivalBoothDetail({
             title="부스 정보를 찾을 수 없어요"
           />
         }
-        basicInfo={null}
-        detailInfo={null}
+        basicInfo={<p aria-live="polite">{message}</p>}
+        detailInfo={<p aria-live="polite">{message}</p>}
         onBack={onBack}
         onHome={onHome}
       />
     );
   }
 
+  const location = `${booth.locationName} - 축운위 ${operation?.mapNumber ?? ""}번`;
+
   return (
     <BoothDetailLayout
       key={booth.id}
-      heading={
-        <BoothDetailHeading category={booth.category} title={booth.name} />
-      }
+      heading={<BoothDetailHeading category="축운위 부스" title={booth.name} />}
       basicInfo={
         <BoothBasicInfo
-          date={booth.date}
-          time={booth.time}
-          location={booth.location}
-          operator={booth.operator}
-          locationImage={booth.locationImage}
+          date={schedule.date}
+          time={schedule.time}
+          location={location}
+          operator={booth.organizer}
+          locationImage={operation?.locationImageUrl ?? null}
           locationImageAlt={`${booth.name} 위치 안내`}
         />
       }

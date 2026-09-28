@@ -17,8 +17,7 @@ import favoritePopup from "../assets/images/booth/popup.svg";
 import timeIcon from "../assets/images/booth/time.svg";
 import locationIcon from "../assets/images/booth/location.svg";
 
-import { booths29 } from "../data/booths29.js";
-import { booths30 } from "../data/booths30.js";
+import { getPerformances } from "../api/performanceApi.js";
 import { getBooths } from "../services/BoothAllPage.js";
 
 import "../styles/BoothAllPage.css";
@@ -60,6 +59,8 @@ const CATEGORY_NAMES = {
 function normalizeBooth(booth) {
   return {
     id: booth.id,
+    apiCategory: booth.category,
+    entityType: "booth",
     date: Number(booth.operationDate.slice(-2)),
     category: CATEGORY_NAMES[booth.category] ?? booth.category,
     name: booth.name,
@@ -70,10 +71,41 @@ function normalizeBooth(booth) {
   };
 }
 
-function getPerformancesForDate(date) {
-  const dayItems = date === 29 ? booths29 : booths30;
+function normalizePerformance(performance) {
+  return {
+    id: `performance-${performance.id}`,
+    apiId: performance.id,
+    entityType: "performance",
+    date: Number(performance.performanceDate.slice(-2)),
+    category: "공연",
+    name: performance.title,
+    organizer: performance.performer,
+    time: `${performance.startTime}~${performance.endTime}`,
+    location: performance.stage,
+  };
+}
 
-  return dayItems.filter((item) => item.category === "공연");
+function getBoothDetailPath(booth) {
+  if (booth.entityType === "performance") {
+    return `/performance/${booth.apiId}`;
+  }
+
+  const day = booth.date;
+
+  switch (booth.apiCategory) {
+    case "GENERAL":
+      return `/booth/general/${day}/${booth.id}`;
+    case "SOM_COLLECTION":
+      return `/booth/som-collection/${day}/${booth.id}`;
+    case "COMMITTEE":
+      return `/booth/festival/${day}/${booth.id}`;
+    case "FOOD_TRUCK":
+      return `/foodtruck/detail/${day}/${booth.id}`;
+    case "PUB":
+      return `/booth/bar/${day}/${booth.id}`;
+    default:
+      return `/booths/${booth.id}`;
+  }
 }
 
 function getInitialFavorites() {
@@ -145,7 +177,7 @@ function BoothCard({ booth, isFavorite, onToggleFavorite }) {
     <article className="booth-data-card">
       <Link
         className="booth-card-link"
-        to={`/booths/${booth.id}`}
+        to={getBoothDetailPath(booth)}
         state={{ date: booth.date }}
         aria-label={`${booth.name} 상세보기`}
       >
@@ -172,11 +204,13 @@ function BoothCard({ booth, isFavorite, onToggleFavorite }) {
         </dl>
       </Link>
 
-      <HeartButton
-        boothId={booth.id}
-        isFavorite={isFavorite}
-        onToggle={onToggleFavorite}
-      />
+      {booth.entityType !== "performance" && (
+        <HeartButton
+          boothId={booth.id}
+          isFavorite={isFavorite}
+          onToggle={onToggleFavorite}
+        />
+      )}
     </article>
   );
 }
@@ -228,24 +262,32 @@ function BoothAllPage() {
   }, [favorites]);
 
   useEffect(() => {
-    if (showFavorites || submittedQuery || selectedCategory === "공연소개") {
+    if (showFavorites || submittedQuery) {
       return undefined;
     }
 
     const controller = new AbortController();
     const requestKey = listLoadKey;
+    const shouldLoadBooths = selectedCategory !== "공연소개";
+    const shouldLoadPerformances =
+      selectedCategory === "전체" || selectedCategory === "공연소개";
+    const boothRequest = shouldLoadBooths
+      ? getBooths({
+          date: API_DATES[selectedDate],
+          category: API_CATEGORIES[selectedCategory] ?? null,
+          signal: controller.signal,
+        })
+      : Promise.resolve([]);
+    const performanceRequest = shouldLoadPerformances
+      ? getPerformances(API_DATES[selectedDate], controller.signal)
+      : Promise.resolve([]);
 
-    getBooths({
-      date: API_DATES[selectedDate],
-      category: API_CATEGORIES[selectedCategory] ?? null,
-      signal: controller.signal,
-    })
-      .then((items) => {
-        const nextBooths = items.map(normalizeBooth);
-
-        if (selectedCategory === "전체") {
-          nextBooths.push(...getPerformancesForDate(selectedDate));
-        }
+    Promise.all([boothRequest, performanceRequest])
+      .then(([boothItems, performanceItems]) => {
+        const nextBooths = [
+          ...boothItems.map(normalizeBooth),
+          ...performanceItems.map(normalizePerformance),
+        ];
 
         setBooths(nextBooths);
         setLoadState({ key: requestKey, error: "" });
@@ -414,19 +456,15 @@ function BoothAllPage() {
   };
 
   const hasSearched = submittedQuery.length > 0;
-  const visibleBooths =
-    selectedCategory === "공연소개"
-      ? getPerformancesForDate(selectedDate)
-      : booths;
+  const visibleBooths = booths;
   const activeLoadKey = showFavorites ? favoriteLoadKey : listLoadKey;
   const isBoothsLoading =
     !hasSearched &&
-    selectedCategory !== "공연소개" &&
     !(showFavorites && favorites.length === 0) &&
     loadState.key !== activeLoadKey;
   const visibleBoothError = hasSearched
     ? searchError
-    : selectedCategory === "공연소개" || loadState.key !== activeLoadKey
+    : loadState.key !== activeLoadKey
       ? ""
       : loadState.error;
 
@@ -638,7 +676,7 @@ function BoothAllPage() {
               ))}
             </div>
           </div>
-        ) : selectedCategory !== "공연소개" && isBoothsLoading ? (
+        ) : isBoothsLoading ? (
           <p className="booth-load-message">부스 목록을 불러오는 중...</p>
         ) : (
           <BoothListArtwork

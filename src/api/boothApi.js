@@ -1,8 +1,9 @@
 // 추가: 공연 API와 같은 서버 주소를 사용합니다.
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? "").replace(
-  /\/+$/,
-  "",
-);
+const API_BASE_URL = (
+  import.meta.env.DEV
+    ? "/backend-api"
+    : (import.meta.env.VITE_API_BASE_URL ?? "")
+).replace(/\/+$/, "");
 
 export const hasBoothApi = Boolean(API_BASE_URL);
 
@@ -13,14 +14,20 @@ export async function getBooth(boothId, signal) {
     { signal },
   );
 
-  const result = await response.json();
+  let result;
 
-  if (!response.ok || result.success !== true || result.code !== "SUCCESS") {
+  try {
+    result = await response.json();
+  } catch {
+    result = null;
+  }
+
+  if (!response.ok || result?.success !== true || result?.code !== "SUCCESS") {
     const error = new Error(
-      result.message || "부스 정보를 불러오지 못했습니다.",
+      result?.message || "부스 정보를 불러오지 못했습니다.",
     );
     error.status = response.status;
-    error.code = result.code;
+    error.code = result?.code;
     throw error;
   }
 

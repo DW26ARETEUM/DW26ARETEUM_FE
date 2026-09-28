@@ -8,6 +8,34 @@ import barSelected from "../assets/images/boothMap/barSelected.png";
 
 export const DAYS = [29, 30];
 
+// 지도 목록의 순서(지도 번호)를 백엔드의 실제 부스 ID로 변환합니다.
+const BOOTH_IDS = {
+  general: {
+    29: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+    30: [1, 2, 15, 4, 16, 6, 7, 17, 9, 10, 11, 18, 13, 14],
+  },
+  somCollection: {
+    29: [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+    30: [21, 22, 32, 24, 25, 27, 28, 29, 30, 33],
+  },
+  festival: {
+    29: [41, 42, 43, 44, 45, 46, 47, 48, 49, 50],
+    30: [41, 42, 43, 44, 45, 46, 47, 48, 49, 50],
+  },
+  food: {
+    29: [51, 52, 53, 54, 55, 56],
+    30: [54, 56, 55, 51, 52, 53],
+  },
+  bar: {
+    29: [61, 62, 63, 64],
+    30: [61, 62, 65, 66],
+  },
+};
+
+function getBoothId(category, day, position) {
+  return BOOTH_IDS[category]?.[day]?.[position - 1] ?? position;
+}
+
 // 카테고리별 지도(1: 본 행사장, 2: 푸드트럭 구역)와 상세 경로
 export const CATEGORIES = [
   {
@@ -19,32 +47,37 @@ export const CATEGORIES = [
     key: "general",
     label: "일반부스",
     maps: [generalBoothSelected, foodDefault],
-    getPath: (day, id) => `/booth/general/${day}/${id}`,
+    getPath: (day, position) =>
+      `/booth/general/${day}/${getBoothId("general", day, position)}`,
   },
   {
     key: "somCollection",
     label: "솜컬렉션",
     maps: [somCollectionSelected, foodDefault],
-    getPath: (day, id) => `/booth/som-collection/${day}/${id}`,
+    getPath: (day, position) =>
+      `/booth/som-collection/${day}/${getBoothId("somCollection", day, position)}`,
   },
   {
     key: "festival",
     label: "축운위",
     maps: [festivalSelected, foodDefault],
-    getPath: (day, id) => `/booth/festival/${id}`,
+    getPath: (day, position) =>
+      `/booth/festival/${day}/${getBoothId("festival", day, position)}`,
   },
   {
     key: "food",
     label: "푸드트럭",
     maps: [boothDefault, foodSelected],
     initialSlide: 1,
-    getPath: () => "/foodtruck/detail",
+    getPath: (day, position) =>
+      `/foodtruck/detail/${day}/${getBoothId("food", day, position)}`,
   },
   {
     key: "bar",
     label: "주점",
     maps: [barSelected, foodDefault],
-    getPath: (day, id) => `/booth/bar/${day}/${id}`,
+    getPath: (day, position) =>
+      `/booth/bar/${day}/${getBoothId("bar", day, position)}`,
   },
 ];
 
