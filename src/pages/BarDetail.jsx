@@ -1,46 +1,48 @@
-import useBoothDetail from "../api/useBoothDetail.js";
-import BoothBasicInfo from "../components/boothDetail/BoothBasicInfo.jsx";
-import BoothDetailHeading from "../components/boothDetail/BoothDetailHeading.jsx";
-import BoothDetailLayout from "../components/boothDetail/BoothDetailLayout.jsx";
-import BoothDetailPanel from "../components/boothDetail/BoothDetailPanel.jsx";
-
+import { useParams } from "react-router-dom";
 import "../styles/BarDetail.css";
+import { formatBoothSchedule, getOperationForDay } from "../api/boothApi.js";
+import useBoothDetail from "../hooks/useBoothDetail.js";
+import BoothDetailLayout from "../components/boothDetail/BoothDetailLayout.jsx";
+import BoothDetailHeading from "../components/boothDetail/BoothDetailHeading.jsx";
+import BoothBasicInfo from "../components/boothDetail/BoothBasicInfo.jsx";
+import BoothDetailPanel from "../components/boothDetail/BoothDetailPanel.jsx";
+import BoothDetailStatus from "../components/boothDetail/BoothDetailStatus.jsx";
+
+const CATEGORY_LABEL = "주점";
 
 export default function BarDetail({ onBack, onHome }) {
-  const { booth, message, operation, schedule } = useBoothDetail("PUB");
+  const { day, boothId } = useParams();
+  const { status, booth } = useBoothDetail(boothId, "PUB");
 
   if (!booth) {
     return (
-      <BoothDetailLayout
-        heading={
-          <BoothDetailHeading
-            category="주점"
-            title="부스 정보를 찾을 수 없어요"
-          />
-        }
-        basicInfo={<p aria-live="polite">{message}</p>}
-        detailInfo={<p aria-live="polite">{message}</p>}
+      <BoothDetailStatus
+        category={CATEGORY_LABEL}
+        status={status}
         onBack={onBack}
         onHome={onHome}
       />
     );
   }
 
-  const location = `${booth.locationName} - 주점 ${operation?.mapNumber ?? ""}번`;
+  const operations = booth.operations ?? [];
+  const menus = booth.menus ?? [];
+  const schedule = formatBoothSchedule(operations);
+  const operation = getOperationForDay(operations, day) ?? operations[0];
 
   return (
     <BoothDetailLayout
-      key={booth.id}
+      key={`${day}-${booth.id}`}
       heading={(selectedTab) =>
         selectedTab === "detail" ? (
           <BoothDetailHeading
-            category={booth.organizer}
+            category={booth.organizer ?? booth.name}
             logo={booth.iconImageUrl}
-            logoAlt={`${booth.organizer} 로고`}
+            logoAlt={`${booth.organizer ?? booth.name} 로고`}
           />
         ) : (
           <BoothDetailHeading
-            category="주점"
+            category={CATEGORY_LABEL}
             subtitle={booth.organizer}
             title={booth.name}
           />
@@ -50,7 +52,7 @@ export default function BarDetail({ onBack, onHome }) {
         <BoothBasicInfo
           date={schedule.date}
           time={schedule.time}
-          location={location}
+          location={booth.locationName}
           operator={booth.organizer}
           locationImage={operation?.locationImageUrl ?? null}
           locationImageAlt={`${booth.name} 위치 안내`}
@@ -64,7 +66,7 @@ export default function BarDetail({ onBack, onHome }) {
             </h3>
 
             <ul className="bar-menu__list">
-              {booth.menus.map(({ id, name, priceText, description }) => (
+              {menus.map(({ id, name, priceText, description }) => (
                 <li
                   key={id}
                   className={

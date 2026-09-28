@@ -1,44 +1,46 @@
-import useBoothDetail from "../api/useBoothDetail.js";
-import BoothBasicInfo from "../components/boothDetail/BoothBasicInfo.jsx";
-import BoothDetailHeading from "../components/boothDetail/BoothDetailHeading.jsx";
-import BoothDetailLayout from "../components/boothDetail/BoothDetailLayout.jsx";
-import BoothDetailPanel from "../components/boothDetail/BoothDetailPanel.jsx";
-
+import { useParams } from "react-router-dom";
 import "../styles/FestivalBoothDetail.css";
+import { formatBoothSchedule } from "../api/boothApi.js";
+import useBoothDetail from "../hooks/useBoothDetail.js";
+import BoothDetailLayout from "../components/boothDetail/BoothDetailLayout.jsx";
+import BoothDetailHeading from "../components/boothDetail/BoothDetailHeading.jsx";
+import BoothBasicInfo from "../components/boothDetail/BoothBasicInfo.jsx";
+import BoothDetailPanel from "../components/boothDetail/BoothDetailPanel.jsx";
+import BoothDetailStatus from "../components/boothDetail/BoothDetailStatus.jsx";
+
+const CATEGORY_LABEL = "축운위 부스";
 
 export default function FestivalBoothDetail({ onBack, onHome }) {
-  const { booth, message, operation, schedule } = useBoothDetail("COMMITTEE");
+  const { boothId } = useParams();
+  const { status, booth } = useBoothDetail(boothId, "COMMITTEE");
 
   if (!booth) {
     return (
-      <BoothDetailLayout
-        heading={
-          <BoothDetailHeading
-            category="축운위 부스"
-            title="부스 정보를 찾을 수 없어요"
-          />
-        }
-        basicInfo={<p aria-live="polite">{message}</p>}
-        detailInfo={<p aria-live="polite">{message}</p>}
+      <BoothDetailStatus
+        category={CATEGORY_LABEL}
+        status={status}
         onBack={onBack}
         onHome={onHome}
       />
     );
   }
 
-  const location = `${booth.locationName} - 축운위 ${operation?.mapNumber ?? ""}번`;
+  const operations = booth.operations ?? [];
+  const schedule = formatBoothSchedule(operations);
 
   return (
     <BoothDetailLayout
       key={booth.id}
-      heading={<BoothDetailHeading category="축운위 부스" title={booth.name} />}
+      heading={
+        <BoothDetailHeading category={CATEGORY_LABEL} title={booth.name} />
+      }
       basicInfo={
         <BoothBasicInfo
           date={schedule.date}
           time={schedule.time}
-          location={location}
+          location={booth.locationName}
           operator={booth.organizer}
-          locationImage={operation?.locationImageUrl ?? null}
+          locationImage={operations[0]?.locationImageUrl ?? null}
           locationImageAlt={`${booth.name} 위치 안내`}
         />
       }

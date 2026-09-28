@@ -1,43 +1,44 @@
-import useBoothDetail from "../api/useBoothDetail.js";
-import BoothBasicInfo from "../components/boothDetail/BoothBasicInfo.jsx";
-import BoothDetailHeading from "../components/boothDetail/BoothDetailHeading.jsx";
-import BoothDetailLayout from "../components/boothDetail/BoothDetailLayout.jsx";
-import BoothDetailPanel from "../components/boothDetail/BoothDetailPanel.jsx";
-
+import { useParams } from "react-router-dom";
 import "../styles/SomCollectionDetail.css";
+import { formatBoothSchedule, getOperationForDay } from "../api/boothApi.js";
+import useBoothDetail from "../hooks/useBoothDetail.js";
+import BoothDetailLayout from "../components/boothDetail/BoothDetailLayout.jsx";
+import BoothDetailHeading from "../components/boothDetail/BoothDetailHeading.jsx";
+import BoothBasicInfo from "../components/boothDetail/BoothBasicInfo.jsx";
+import BoothDetailPanel from "../components/boothDetail/BoothDetailPanel.jsx";
+import BoothDetailStatus from "../components/boothDetail/BoothDetailStatus.jsx";
+
+const CATEGORY_LABEL = "솜컬렉션";
 
 const PRICE_NOTICE =
   "*기재된 가격은 예상 가격으로,\n축제 당일 가격과 상이할 수 있습니다.";
 
 export default function SomCollectionDetail({ onBack, onHome }) {
-  const { booth, message, operation, schedule } =
-    useBoothDetail("SOM_COLLECTION");
+  const { day, boothId } = useParams();
+  const { status, booth } = useBoothDetail(boothId, "SOM_COLLECTION");
 
   if (!booth) {
     return (
-      <BoothDetailLayout
-        heading={
-          <BoothDetailHeading
-            category="솜컬렉션"
-            title="부스 정보를 찾을 수 없어요"
-          />
-        }
-        basicInfo={<p aria-live="polite">{message}</p>}
-        detailInfo={<p aria-live="polite">{message}</p>}
+      <BoothDetailStatus
+        category={CATEGORY_LABEL}
+        status={status}
         onBack={onBack}
         onHome={onHome}
       />
     );
   }
 
-  const location = `${booth.locationName} - 솜컬렉션 ${operation?.mapNumber ?? ""}번`;
+  const operations = booth.operations ?? [];
+  const menus = booth.menus ?? [];
+  const schedule = formatBoothSchedule(operations);
+  const operation = getOperationForDay(operations, day) ?? operations[0];
 
   return (
     <BoothDetailLayout
-      key={booth.id}
+      key={`${day}-${booth.id}`}
       heading={(selectedTab) => (
         <BoothDetailHeading
-          category="솜컬렉션"
+          category={CATEGORY_LABEL}
           title={booth.name}
           notice={selectedTab === "detail" ? PRICE_NOTICE : undefined}
         />
@@ -46,7 +47,7 @@ export default function SomCollectionDetail({ onBack, onHome }) {
         <BoothBasicInfo
           date={schedule.date}
           time={schedule.time}
-          location={location}
+          location={booth.locationName}
           operator={booth.organizer}
           locationImage={operation?.locationImageUrl ?? null}
           locationImageAlt={`${booth.name} 위치 안내`}
@@ -54,9 +55,9 @@ export default function SomCollectionDetail({ onBack, onHome }) {
       }
       detailInfo={
         <BoothDetailPanel scrollable>
-          {booth.menus.length > 0 && (
+          {menus.length > 0 && (
             <ul className="som-collection-items">
-              {booth.menus.map(({ id, name, priceText }) => (
+              {menus.map(({ id, name, priceText }) => (
                 <li key={id} className="som-collection-items__item">
                   <span className="som-collection-items__name">{name}</span>
                   <span className="som-collection-items__price">
