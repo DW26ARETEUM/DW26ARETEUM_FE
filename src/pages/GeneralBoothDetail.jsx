@@ -157,10 +157,13 @@ export default function GeneralBoothDetail({ onBack, onHome }) {
         }
         detailInfo={
           <BoothDetailPanel>
-            {/* 수정: 기존 문구 자리에서 API 소개글을 표시합니다. */}
-            <p className="general-booth-detail__message">
-              {booth.description || "세부정보 준비 중입니다."}
-            </p>
+            {/* 수정: 일반 부스의 세부정보는 등록된 정보 없음 화면으로 표시합니다. */}
+            <div className="general-booth-detail__empty">
+              <p className="general-booth-detail__empty-icon">(π_π)</p>
+              <p className="general-booth-detail__empty-text">
+                등록된 정보가 없어요.
+              </p>
+            </div>
           </BoothDetailPanel>
         }
       />

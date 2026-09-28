@@ -10,11 +10,44 @@
   padding: 0;
 }
 
-/* 기존 문구 자리에서 상태 또는 소개글을 표시합니다. */
+/* 기존: 부스 조회 상태 안내 문구입니다. */
 .general-booth-detail__message {
   margin: 18px 0 0;
   color: #525252;
   font-size: calc(var(--u) * 12);
   line-height: 1.5;
   text-align: center;
+}
+
+/* 수정: 공통 패널 안에서 안내 내용만 중앙에 배치합니다. */
+.general-booth-detail__empty {
+  min-height: calc(var(--u) * 376);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--u) * 24);
+}
+
+/* 추가: 피그마의 표정과 안내 문구 스타일입니다. */
+.general-booth-detail__empty-icon,
+.general-booth-detail__empty-text {
+  margin: 0;
+  font-family: Galmuri11;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  text-align: center;
+}
+
+.general-booth-detail__empty-icon {
+  color: #4b1528;
+  font-size: calc(var(--u) * 40);
+  letter-spacing: calc(var(--u) * -0.8);
+}
+
+.general-booth-detail__empty-text {
+  color: #111;
+  font-size: calc(var(--u) * 16);
+  letter-spacing: calc(var(--u) * -0.32);
 }
