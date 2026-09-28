@@ -394,6 +394,41 @@
 }
 
 /* =========================
+   PERFORMANCE TIMELINE
+========================= */
+
+.booth-timeline-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 94px;
+
+  box-sizing: border-box;
+
+  margin-top: 20px;
+  padding: 0;
+
+  color: #111111;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: rgba(252, 245, 249, 0.8);
+
+  cursor: pointer;
+}
+
+/* 버튼을 눌렀을 때 생기는 기본 효과 제거 */
+.booth-timeline-button:focus {
+  outline: none;
+}
+
+/* =========================
    BOOTH LIST
 ========================= */
 
@@ -401,15 +436,10 @@
   margin-top: 31px;
 }
 
-.booth-list-artwork {
-  position: relative;
-}
-
-.booth-list-artwork > img {
-  display: block;
-
-  width: 100%;
-  height: auto;
+/* 공연소개에서 타임라인 버튼이 있는 경우
+   버튼과 공연 카드 사이 간격 */
+.booth-timeline-button + .booth-list {
+  margin-top: 8px;
 }
 
 /* =========================

@@ -122,15 +122,21 @@ function getInitialFavorites() {
       return [];
     }
 
-    // 앞으로는 실제 booth.id(Number)만 사용
+    // 부스 ID(Number)와 공연 ID("performance-3")를 모두 유지
     return parsedFavorites
-      .map((id) => Number(id))
-      .filter((id) => Number.isFinite(id));
+      .map((id) => {
+        if (typeof id === "string" && id.startsWith("performance-")) {
+          return id;
+        }
+
+        const numericId = Number(id);
+        return Number.isFinite(numericId) ? numericId : null;
+      })
+      .filter((id) => id !== null);
   } catch {
     return [];
   }
 }
-
 function DateButton({ date, selectedDate, onSelect }) {
   const isSelected = date === selectedDate;
 
@@ -204,13 +210,11 @@ function BoothCard({ booth, isFavorite, onToggleFavorite }) {
         </dl>
       </Link>
 
-      {booth.entityType !== "performance" && (
-        <HeartButton
-          boothId={booth.id}
-          isFavorite={isFavorite}
-          onToggle={onToggleFavorite}
-        />
-      )}
+      <HeartButton
+        boothId={booth.id}
+        isFavorite={isFavorite}
+        onToggle={onToggleFavorite}
+      />
     </article>
   );
 }
@@ -318,38 +322,79 @@ function BoothAllPage() {
     const controller = new AbortController();
     const requestKey = favoriteLoadKey;
 
-    Promise.all(
-      Object.values(API_DATES).map((date) =>
-        getBooths({ date, ids: favorites, signal: controller.signal }),
-      ),
-    )
-      .then((dayResults) => {
-        const uniqueBooths = new Map();
+    // 일반 부스 즐겨찾기 ID
+    const favoriteBoothIds = favorites.filter((id) => typeof id === "number");
 
-        dayResults
+    // 공연 즐겨찾기 ID
+    const favoritePerformanceIds = favorites
+      .filter((id) => typeof id === "string" && id.startsWith("performance-"))
+      .map((id) => Number(id.replace("performance-", "")))
+      .filter((id) => Number.isFinite(id));
+
+    // 일반 부스 가져오기
+    const boothRequests =
+      favoriteBoothIds.length > 0
+        ? Object.values(API_DATES).map((date) =>
+            getBooths({
+              date,
+              ids: favoriteBoothIds,
+              signal: controller.signal,
+            }),
+          )
+        : [];
+
+    // 공연 가져오기
+    const performanceRequests =
+      favoritePerformanceIds.length > 0
+        ? Object.values(API_DATES).map((date) =>
+            getPerformances(date, controller.signal),
+          )
+        : [];
+
+    Promise.all([Promise.all(boothRequests), Promise.all(performanceRequests)])
+      .then(([boothDayResults, performanceDayResults]) => {
+        const uniqueItems = new Map();
+
+        // 일반 부스 즐겨찾기
+        boothDayResults
           .flat()
           .map(normalizeBooth)
           .forEach((booth) => {
-            if (!uniqueBooths.has(booth.id)) {
-              uniqueBooths.set(booth.id, booth);
+            if (favoriteBoothIds.includes(booth.id)) {
+              uniqueItems.set(booth.id, booth);
             }
           });
 
-        setFavoriteBooths([...uniqueBooths.values()]);
-        setLoadState({ key: requestKey, error: "" });
+        // 공연 즐겨찾기
+        performanceDayResults
+          .flat()
+          .map(normalizePerformance)
+          .forEach((performance) => {
+            if (favoritePerformanceIds.includes(performance.apiId)) {
+              uniqueItems.set(performance.id, performance);
+            }
+          });
+
+        setFavoriteBooths([...uniqueItems.values()]);
+        setLoadState({
+          key: requestKey,
+          error: "",
+        });
       })
       .catch((error) => {
         if (error.name !== "AbortError") {
+          setFavoriteBooths([]);
+
           setLoadState({
             key: requestKey,
-            error: "찜한 부스를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.",
+            error:
+              "찜한 부스와 공연을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.",
           });
         }
       });
 
     return () => controller.abort();
   }, [favoriteLoadKey, favorites, showFavorites]);
-
   useEffect(() => {
     if (!isFavoriteModalOpen) {
       return undefined;
@@ -623,6 +668,16 @@ function BoothAllPage() {
             <span className="booth-filter-heart">♥</span>
           </button>
         </nav>
+      )}
+      {/* 공연소개 - 전체 타임라인 보기 */}
+      {!hasSearched && !showFavorites && selectedCategory === "공연소개" && (
+        <button
+          className="booth-timeline-button"
+          type="button"
+          onClick={() => navigate("/timetable")}
+        >
+          전체 타임라인 보기
+        </button>
       )}
 
       {/* 부스 목록 */}
