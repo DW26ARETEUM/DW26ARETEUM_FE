@@ -567,6 +567,15 @@ function BoothAllPage() {
   };
 
   const cancelFavoriteFromModal = () => {
+    // 팝업에서 X를 눌러도 선택한 항목은 찜 등록
+    if (pendingFavorite !== null) {
+      setFavorites((currentFavorites) =>
+        currentFavorites.includes(pendingFavorite)
+          ? currentFavorites
+          : [...currentFavorites, pendingFavorite],
+      );
+    }
+
     setPendingFavorite(null);
     setIsFavoriteModalOpen(false);
   };
