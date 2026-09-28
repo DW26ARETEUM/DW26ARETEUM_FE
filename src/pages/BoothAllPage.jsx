@@ -424,13 +424,40 @@ function BoothAllPage() {
     setSearchError("");
 
     try {
-      const results = await getBooths({
+      // 부스 검색
+      const boothPromise = getBooths({
         date: API_DATES[date],
         keyword: query,
       });
 
+      // 해당 날짜의 공연 전체 조회
+      const performancePromise = getPerformances(API_DATES[date]);
+
+      const [boothResults, performanceResults] = await Promise.all([
+        boothPromise,
+        performancePromise,
+      ]);
+
+      // 공연은 프론트에서 공연명/공연자 기준으로 검색
+      const normalizedPerformances =
+        performanceResults.map(normalizePerformance);
+
+      const normalizedQuery = query.trim().toLowerCase();
+
+      const filteredPerformances = normalizedPerformances.filter(
+        (performance) =>
+          performance.name?.toLowerCase().includes(normalizedQuery) ||
+          performance.organizer?.toLowerCase().includes(normalizedQuery),
+      );
+
+      // 부스 검색 결과 + 공연 검색 결과
+      const combinedResults = [
+        ...boothResults.map(normalizeBooth),
+        ...filteredPerformances,
+      ];
+
       if (searchRequestId.current === currentRequestId) {
-        setSearchResults(results.map(normalizeBooth));
+        setSearchResults(combinedResults);
       }
     } catch {
       if (searchRequestId.current === currentRequestId) {
