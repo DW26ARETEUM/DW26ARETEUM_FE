@@ -1,3 +1,5 @@
+const LONG_TITLE_LENGTH = 20;
+
 export default function BoothDetailHeading({
   category,
   subtitle,
@@ -6,9 +8,13 @@ export default function BoothDetailHeading({
   logo,
   logoAlt = "",
 }) {
-  const headingClassName = subtitle
-    ? "booth-detail-heading booth-detail-heading--compact"
-    : "booth-detail-heading";
+  const headingClassName = [
+    "booth-detail-heading",
+    subtitle && "booth-detail-heading--compact",
+    title?.length > LONG_TITLE_LENGTH && "booth-detail-heading--long-title",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className={headingClassName}>
