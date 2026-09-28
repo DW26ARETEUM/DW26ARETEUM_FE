@@ -42,6 +42,10 @@ const rememberLastId = (lastIdRef, list) => {
   });
 };
 
+// 스크롤 목록에서 맨 아래까지 남은 거리(px)
+const getDistanceFromBottom = (list) =>
+  list.scrollHeight - list.scrollTop - list.clientHeight;
+
 export default function SomTalk() {
   const navigate = useNavigate();
   const messagesRef = useRef(null);
@@ -136,9 +140,8 @@ export default function SomTalk() {
 
     // 맨 아래 보는 중이었거나 내 글이면 새 글 따라 내려가기
     const list = messagesRef.current;
-    const isNearBottom =
-      !list || list.scrollHeight - list.scrollTop - list.clientHeight;
-    BOTTOM_THRESHOLD;
+    const distance = list ? getDistanceFromBottom(list) : 0;
+    const isNearBottom = distance < BOTTOM_THRESHOLD;
     const hasMyMessage = visibleMessages.some(
       ({ clientId }) => clientId === getClientId(),
     );
@@ -208,7 +211,6 @@ export default function SomTalk() {
   }, [appendMessages, recoverMissedMessages]);
 
   // 맨 위 글보다 옛날 글 불러와서 위에 붙이기
-  // 추가: 자동 불러오기에서도 쓰려고 useCallback으로 감쌈
   const loadOlderMessages = useCallback(async () => {
     const list = messagesRef.current;
     if (!list || !messages?.length || isLoadingOlderRef.current) return;
@@ -248,7 +250,7 @@ export default function SomTalk() {
     }
   }, [messages, selectedTab]);
 
-  // 추가: 글이 적어서 화면이 다 안 차면 스크롤이 안 생기니까,
+  // 글이 적어서 화면이 다 안 차면 스크롤이 안 생기니까,
   // 옛날 글이 더 있으면 화면이 찰 때까지 자동으로 더 불러오기
   useEffect(() => {
     const list = messagesRef.current;
