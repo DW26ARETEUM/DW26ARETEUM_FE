@@ -147,9 +147,14 @@ export default function Onboarding() {
 
   const activeStory = storyStep === null ? null : story[storyStep];
 
+  function handleComplete() {
+    localStorage.setItem("hasSeenOnboarding", "true");
+    navigate("/", { replace: true });
+  }
+
   function advanceStory() {
     if (storyStep === story.length - 1) {
-      navigate("/");
+      handleComplete();
       return;
     }
     setStoryStep((step) => (step === null ? 0 : step + 1));
@@ -216,7 +221,7 @@ export default function Onboarding() {
             <img src={whiteButton} alt="" />
             <span>스토리 보고 시작하기</span>
           </button>
-          <button type="button" onClick={() => navigate("/home")}>
+          <button type="button" onClick={handleComplete}>
             <img src={pinkButton} alt="" />
             <span>바로 시작하기</span>
           </button>
