@@ -125,10 +125,13 @@ export default function PerformanceDetail({ onBack, onHome }) {
     : null;
   const image = imagePath ? imageFiles[imagePath] : null;
 
-  // 추가: 영문 공연명이 있으면 기존 제목 영역에 함께 표시합니다.
-  const displayTitle = performance?.titleEn
-    ? `${performance.titleEn}\n${performance.title}`
-    : performance?.title;
+  // 수정: 합정동 공연은 피그마 위치에서 줄을 나누고, 영문 제목은 기존처럼 두 줄로 표시합니다.
+  const displayTitle =
+    performance?.title === "합정동 평화유지연합회"
+      ? "합정동\n평화유지연합회"
+      : performance?.titleEn
+        ? `${performance.titleEn}\n${performance.title}`
+        : performance?.title;
 
   return (
     <BoothDetailLayout
