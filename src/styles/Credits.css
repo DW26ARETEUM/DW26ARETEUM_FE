@@ -117,6 +117,7 @@
   letter-spacing: -0.015em;
   text-align: center;
   overflow-wrap: anywhere;
+  font-family: Galmuri14;
 }
 .credits-event__message p,
 .credits-copy p {
@@ -136,6 +137,7 @@
 .credits-copy em {
   color: #ff3288;
   font-style: normal;
+  font-family: Galmuri11;
 }
 .credits-committee__seal {
   display: flex;
@@ -265,15 +267,16 @@
 }
 .credits-member__name {
   max-width: 100%;
-  color: #51494b;
   font-size: calc(var(--u) * 10);
   line-height: 1.45;
   word-break: keep-all;
   overflow-wrap: anywhere;
+  font-family: Galmuri14;
+  color: #000;
 }
 .credits-member__name span {
   display: block;
-  color: #777;
+  font-size: calc(var(--u) * 8);
 }
 .credits-section--design .credits-member-grid {
   grid-template-columns: repeat(6, minmax(0, 1fr));
