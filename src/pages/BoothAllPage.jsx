@@ -17,9 +17,8 @@ import favoritePopup from "../assets/images/booth/popup.svg";
 import timeIcon from "../assets/images/booth/time.svg";
 import locationIcon from "../assets/images/booth/location.svg";
 
-import { booths29 } from "../data/booths29.js";
-import { booths30 } from "../data/booths30.js";
-import { searchBooths } from "../services/boothSearch.js";
+import { getPerformances } from "../api/performanceApi.js";
+import { getBooths } from "../services/BoothAllPage.js";
 
 import "../styles/BoothAllPage.css";
 
@@ -35,6 +34,79 @@ const categories = [
 
 const FAVORITES_STORAGE_KEY = "areteum-booth-favorites";
 const FAVORITE_MODAL_CONFIRMED_KEY = "areteum-favorite-modal-confirmed";
+
+const API_DATES = {
+  29: "2026-09-29",
+  30: "2026-09-30",
+};
+
+const API_CATEGORIES = {
+  일반부스: "GENERAL",
+  솜컬렉션: "SOM_COLLECTION",
+  축운위: "COMMITTEE",
+  푸드트럭: "FOOD_TRUCK",
+  주점: "PUB",
+};
+
+const CATEGORY_NAMES = {
+  GENERAL: "일반 부스",
+  SOM_COLLECTION: "솜컬렉션",
+  COMMITTEE: "축운위",
+  FOOD_TRUCK: "푸드트럭",
+  PUB: "주점",
+};
+
+function normalizeBooth(booth) {
+  return {
+    id: booth.id,
+    apiCategory: booth.category,
+    entityType: "booth",
+    date: Number(booth.operationDate.slice(-2)),
+    category: CATEGORY_NAMES[booth.category] ?? booth.category,
+    name: booth.name,
+    organizer: booth.organizer,
+    time: `${booth.startTime}~${booth.endTime}`,
+    location: booth.locationName,
+    mapNumber: booth.mapNumber,
+  };
+}
+
+function normalizePerformance(performance) {
+  return {
+    id: `performance-${performance.id}`,
+    apiId: performance.id,
+    entityType: "performance",
+    date: Number(performance.performanceDate.slice(-2)),
+    category: "공연",
+    name: performance.title,
+    organizer: performance.performer,
+    time: `${performance.startTime}~${performance.endTime}`,
+    location: performance.stage,
+  };
+}
+
+function getBoothDetailPath(booth) {
+  if (booth.entityType === "performance") {
+    return `/performance/${booth.apiId}`;
+  }
+
+  const day = booth.date;
+
+  switch (booth.apiCategory) {
+    case "GENERAL":
+      return `/booth/general/${day}/${booth.id}`;
+    case "SOM_COLLECTION":
+      return `/booth/som-collection/${day}/${booth.id}`;
+    case "COMMITTEE":
+      return `/booth/festival/${day}/${booth.id}`;
+    case "FOOD_TRUCK":
+      return `/foodtruck/detail/${day}/${booth.id}`;
+    case "PUB":
+      return `/booth/bar/${day}/${booth.id}`;
+    default:
+      return `/booths/${booth.id}`;
+  }
+}
 
 function getInitialFavorites() {
   try {
@@ -100,17 +172,13 @@ function HeartButton({ boothId, isFavorite, onToggle, style }) {
   );
 }
 
-const categoryLabels = {
-  일반부스: "일반 부스",
-  공연소개: "공연",
-};
-
 function BoothCard({ booth, isFavorite, onToggleFavorite }) {
   return (
     <article className="booth-data-card">
       <Link
         className="booth-card-link"
-        to={`/booths/${booth.id}`}
+        to={getBoothDetailPath(booth)}
+        state={{ date: booth.date }}
         aria-label={`${booth.name} 상세보기`}
       >
         <p>{booth.category}</p>
@@ -136,28 +204,21 @@ function BoothCard({ booth, isFavorite, onToggleFavorite }) {
         </dl>
       </Link>
 
-      <HeartButton
-        boothId={booth.id}
-        isFavorite={isFavorite}
-        onToggle={onToggleFavorite}
-      />
+      {booth.entityType !== "performance" && (
+        <HeartButton
+          boothId={booth.id}
+          isFavorite={isFavorite}
+          onToggle={onToggleFavorite}
+        />
+      )}
     </article>
   );
 }
 
-function BoothListArtwork({ category, date, favorites, onToggleFavorite }) {
-  const dayBooths = date === 29 ? booths29 : booths30;
-
-  const selectedCategory = categoryLabels[category] ?? category;
-
-  const visibleBooths =
-    category === "전체"
-      ? dayBooths
-      : dayBooths.filter((booth) => booth.category === selectedCategory);
-
+function BoothListArtwork({ booths, favorites, onToggleFavorite }) {
   return (
     <div className="booth-data-grid">
-      {visibleBooths.map((booth) => (
+      {booths.map((booth) => (
         <BoothCard
           key={booth.id}
           booth={booth}
@@ -187,12 +248,107 @@ function BoothAllPage() {
   const [pendingFavorite, setPendingFavorite] = useState(null);
 
   const [favorites, setFavorites] = useState(getInitialFavorites);
+  const [booths, setBooths] = useState([]);
+  const [favoriteBooths, setFavoriteBooths] = useState([]);
+  const [loadState, setLoadState] = useState({ key: "", error: "" });
+  const [searchError, setSearchError] = useState("");
 
   const searchRequestId = useRef(0);
+  const listLoadKey = `list:${selectedDate}:${selectedCategory}`;
+  const favoriteLoadKey = `favorites:${[...favorites].sort((a, b) => a - b).join(",")}`;
 
   useEffect(() => {
     localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
   }, [favorites]);
+
+  useEffect(() => {
+    if (showFavorites || submittedQuery) {
+      return undefined;
+    }
+
+    const controller = new AbortController();
+    const requestKey = listLoadKey;
+    const shouldLoadBooths = selectedCategory !== "공연소개";
+    const shouldLoadPerformances =
+      selectedCategory === "전체" || selectedCategory === "공연소개";
+    const boothRequest = shouldLoadBooths
+      ? getBooths({
+          date: API_DATES[selectedDate],
+          category: API_CATEGORIES[selectedCategory] ?? null,
+          signal: controller.signal,
+        })
+      : Promise.resolve([]);
+    const performanceRequest = shouldLoadPerformances
+      ? getPerformances(API_DATES[selectedDate], controller.signal)
+      : Promise.resolve([]);
+
+    Promise.all([boothRequest, performanceRequest])
+      .then(([boothItems, performanceItems]) => {
+        const nextBooths = [
+          ...boothItems.map(normalizeBooth),
+          ...performanceItems.map(normalizePerformance),
+        ];
+
+        setBooths(nextBooths);
+        setLoadState({ key: requestKey, error: "" });
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          setLoadState({
+            key: requestKey,
+            error: "부스 목록을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.",
+          });
+        }
+      });
+
+    return () => controller.abort();
+  }, [
+    listLoadKey,
+    selectedCategory,
+    selectedDate,
+    showFavorites,
+    submittedQuery,
+  ]);
+
+  useEffect(() => {
+    if (!showFavorites || favorites.length === 0) {
+      return undefined;
+    }
+
+    const controller = new AbortController();
+    const requestKey = favoriteLoadKey;
+
+    Promise.all(
+      Object.values(API_DATES).map((date) =>
+        getBooths({ date, ids: favorites, signal: controller.signal }),
+      ),
+    )
+      .then((dayResults) => {
+        const uniqueBooths = new Map();
+
+        dayResults
+          .flat()
+          .map(normalizeBooth)
+          .forEach((booth) => {
+            if (!uniqueBooths.has(booth.id)) {
+              uniqueBooths.set(booth.id, booth);
+            }
+          });
+
+        setFavoriteBooths([...uniqueBooths.values()]);
+        setLoadState({ key: requestKey, error: "" });
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          setLoadState({
+            key: requestKey,
+            error: "찜한 부스를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.",
+          });
+        }
+      });
+
+    return () => controller.abort();
+  }, [favoriteLoadKey, favorites, showFavorites]);
 
   useEffect(() => {
     if (!isFavoriteModalOpen) {
@@ -220,15 +376,23 @@ function BoothAllPage() {
     searchRequestId.current = currentRequestId;
 
     setIsSearching(true);
+    setSearchError("");
 
     try {
-      const results = await searchBooths({
-        query,
-        date,
+      const results = await getBooths({
+        date: API_DATES[date],
+        keyword: query,
       });
 
       if (searchRequestId.current === currentRequestId) {
-        setSearchResults(results);
+        setSearchResults(results.map(normalizeBooth));
+      }
+    } catch {
+      if (searchRequestId.current === currentRequestId) {
+        setSearchResults([]);
+        setSearchError(
+          "검색 결과를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.",
+        );
       }
     } finally {
       if (searchRequestId.current === currentRequestId) {
@@ -236,18 +400,6 @@ function BoothAllPage() {
       }
     }
   };
-
-  /*
-   * 찜은 날짜/cardIndex가 아니라 실제 booth.id 기준으로 관리.
-   * 양일에 같은 booth.id가 있더라도 찜 목록에서는 하나만 표시.
-   */
-  const allBooths = [...booths29, ...booths30];
-
-  const favoriteBooths = allBooths.filter(
-    (booth, index, booths) =>
-      favorites.includes(booth.id) &&
-      booths.findIndex((item) => item.id === booth.id) === index,
-  );
 
   const toggleFavorite = (boothId) => {
     if (
@@ -260,11 +412,19 @@ function BoothAllPage() {
       return;
     }
 
-    setFavorites((currentFavorites) =>
-      currentFavorites.includes(boothId)
+    if (favorites.includes(boothId)) {
+      setFavoriteBooths((currentBooths) =>
+        currentBooths.filter((booth) => booth.id !== boothId),
+      );
+    }
+
+    setFavorites((currentFavorites) => {
+      const nextFavorites = currentFavorites.includes(boothId)
         ? currentFavorites.filter((id) => id !== boothId)
-        : [...currentFavorites, boothId],
-    );
+        : [...currentFavorites, boothId];
+
+      return nextFavorites;
+    });
   };
 
   const handleSearch = (event) => {
@@ -296,6 +456,17 @@ function BoothAllPage() {
   };
 
   const hasSearched = submittedQuery.length > 0;
+  const visibleBooths = booths;
+  const activeLoadKey = showFavorites ? favoriteLoadKey : listLoadKey;
+  const isBoothsLoading =
+    !hasSearched &&
+    !(showFavorites && favorites.length === 0) &&
+    loadState.key !== activeLoadKey;
+  const visibleBoothError = hasSearched
+    ? searchError
+    : loadState.key !== activeLoadKey
+      ? ""
+      : loadState.error;
 
   const openFavoritesFromModal = () => {
     localStorage.setItem(FAVORITE_MODAL_CONFIRMED_KEY, "true");
@@ -456,7 +627,11 @@ function BoothAllPage() {
 
       {/* 부스 목록 */}
       <section className="booth-list" aria-live="polite">
-        {hasSearched && isSearching ? (
+        {visibleBoothError ? (
+          <p className="booth-load-message booth-load-error">
+            {visibleBoothError}
+          </p>
+        ) : hasSearched && isSearching ? (
           <p className="booth-searching">검색 중...</p>
         ) : hasSearched && searchResults.length === 0 ? (
           <div className="booth-empty-search">
@@ -479,25 +654,33 @@ function BoothAllPage() {
               ))}
             </div>
           </div>
+        ) : showFavorites && isBoothsLoading ? (
+          <p className="booth-load-message">찜한 부스를 불러오는 중...</p>
         ) : showFavorites && favoriteBooths.length === 0 ? (
           <div className="booth-empty-favorites">
             <img src={bookmarkEmpty} alt="저장된 부스가 없어요" />
           </div>
         ) : showFavorites ? (
-          <div className="favorite-booth-list">
-            {favoriteBooths.map((booth) => (
-              <BoothCard
-                key={booth.id}
-                booth={booth}
-                isFavorite
-                onToggleFavorite={toggleFavorite}
-              />
-            ))}
+          <div className="favorite-booth-section">
+            <p className="favorite-booth-guide">
+              찜한 부스는 날짜와 관계없이 모두 확인할 수 있어요.
+            </p>
+            <div className="favorite-booth-list">
+              {favoriteBooths.map((booth) => (
+                <BoothCard
+                  key={booth.id}
+                  booth={booth}
+                  isFavorite
+                  onToggleFavorite={toggleFavorite}
+                />
+              ))}
+            </div>
           </div>
+        ) : isBoothsLoading ? (
+          <p className="booth-load-message">부스 목록을 불러오는 중...</p>
         ) : (
           <BoothListArtwork
-            category={selectedCategory}
-            date={selectedDate}
+            booths={visibleBooths}
             favorites={favorites}
             onToggleFavorite={toggleFavorite}
           />

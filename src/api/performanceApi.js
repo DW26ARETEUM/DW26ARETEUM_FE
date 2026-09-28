@@ -1,6 +1,6 @@
 // 설정된 백엔드 주소를 확인
 export const hasPerformanceApi = Boolean(
-  import.meta.env.VITE_API_BASE_URL?.trim(),
+  import.meta.env.DEV || import.meta.env.VITE_API_BASE_URL?.trim(),
 );
 
 // 공연 API의 공통 응답과 오류 처리
@@ -9,7 +9,9 @@ async function requestPerformance(path, signal) {
     throw new Error("공연 서버 주소가 아직 설정되지 않았습니다.");
   }
 
-  const baseUrl = import.meta.env.VITE_API_BASE_URL.trim().replace(/\/$/, "");
+  const baseUrl = import.meta.env.DEV
+    ? "/backend-api"
+    : import.meta.env.VITE_API_BASE_URL.trim().replace(/\/$/, "");
   const response = await fetch(`${baseUrl}/api/v1${path}`, { signal });
 
   let result;

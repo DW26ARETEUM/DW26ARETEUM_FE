@@ -61,7 +61,7 @@ function App() {
 
               {/* 축운위 상세 */}
               <Route
-                path="/booth/festival/:boothId"
+                path="/booth/festival/:day/:boothId"
                 element={<FestivalBoothDetail />}
               />
 

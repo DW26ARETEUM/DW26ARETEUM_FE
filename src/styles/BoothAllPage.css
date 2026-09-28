@@ -556,6 +556,25 @@
    FAVORITE LIST
 ========================= */
 
+.favorite-booth-guide {
+  margin: 0 2px 12px;
+  color: #7e3158;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.booth-load-message {
+  margin: 72px 0 0;
+  color: #7e3158;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.booth-load-error {
+  color: #9d234f;
+}
+
 .favorite-booth-list {
   display: grid;
 
