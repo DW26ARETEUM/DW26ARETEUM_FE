@@ -79,9 +79,14 @@
   padding: 0;
   border: 0;
 
+  color: #111111;
+  -webkit-text-fill-color: #111111;
+
   background: transparent;
 
   cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .booth-date-button img {
@@ -101,9 +106,14 @@
 
   padding-top: 3px;
 
+  color: #111111;
+  -webkit-text-fill-color: #111111;
+
   font-size: 16px;
 
   place-items: center;
+
+  pointer-events: none;
 }
 
 /* =========================
