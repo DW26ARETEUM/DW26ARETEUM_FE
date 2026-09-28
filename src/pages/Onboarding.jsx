@@ -186,9 +186,9 @@ export default function Onboarding({ onComplete }) {
         />
       </div>
 
-      <div className="onboarding-arcade" aria-hidden="true">
+      <div className="onboarding-arcade">
         <img className="onboarding-arcade-image" src={arcade} alt="" />
-        <div className="onboarding-game-window">
+        <div className="onboarding-game-window" aria-hidden="true">
           {activeStory ? (
             <Character
               src={activeStory.character}
@@ -201,37 +201,37 @@ export default function Onboarding({ onComplete }) {
             <Character x={motion.x} y={motion.y} direction={motion.direction} />
           )}
         </div>
-      </div>
 
-      {activeStory ? (
-        <section
-          className={`onboarding-dialog${storyStep === 2 ? " onboarding-dialog--evolution" : ""}${storyStep === story.length - 1 ? " onboarding-dialog--final" : ""}`}
-          aria-live="polite"
-        >
-          <img className="onboarding-dialog-frame" src={chatFrame} alt="" />
-          <p className="onboarding-dialog-text">{activeStory.text}</p>
-          {!activeStory.effect && storyStep !== 2 && (
-            <button
-              className="onboarding-next"
-              type="button"
-              onClick={advanceStory}
-            >
-              다음으로 <span aria-hidden="true">▶</span>
+        {activeStory ? (
+          <section
+            className={`onboarding-dialog${storyStep === 2 ? " onboarding-dialog--evolution" : ""}${storyStep === story.length - 1 ? " onboarding-dialog--final" : ""}`}
+            aria-live="polite"
+          >
+            <img className="onboarding-dialog-frame" src={chatFrame} alt="" />
+            <p className="onboarding-dialog-text">{activeStory.text}</p>
+            {!activeStory.effect && storyStep !== 2 && (
+              <button
+                className="onboarding-next"
+                type="button"
+                onClick={advanceStory}
+              >
+                다음으로 <span aria-hidden="true">▶</span>
+              </button>
+            )}
+          </section>
+        ) : (
+          <nav className="onboarding-actions" aria-label="시작 방법 선택">
+            <button type="button" onClick={() => setStoryStep(0)}>
+              <img src={whiteButton} alt="" />
+              <span>스토리 보고 시작하기</span>
             </button>
-          )}
-        </section>
-      ) : (
-        <nav className="onboarding-actions" aria-label="시작 방법 선택">
-          <button type="button" onClick={() => setStoryStep(0)}>
-            <img src={whiteButton} alt="" />
-            <span>스토리 보고 시작하기</span>
-          </button>
-          <button type="button" onClick={handleComplete}>
-            <img src={pinkButton} alt="" />
-            <span>바로 시작하기</span>
-          </button>
-        </nav>
-      )}
+            <button type="button" onClick={handleComplete}>
+              <img src={pinkButton} alt="" />
+              <span>바로 시작하기</span>
+            </button>
+          </nav>
+        )}
+      </div>
     </main>
   );
 }
