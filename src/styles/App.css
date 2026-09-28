@@ -1,6 +1,6 @@
 .pc-background {
-  width: 100%;
-  height: 100dvh;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,7 +11,7 @@
 .mobile-frame {
   width: 100%;
   max-width: 393px;
-  height: 100%;
+  height: 100vh;
   max-height: 852px;
   display: flex;
   flex-direction: column;
@@ -24,8 +24,6 @@
 
 .mobile-content {
   flex: 1;
-  min-height: 0;
-  overflow-x: hidden;
   overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -44,7 +42,7 @@
   image-rendering: pixelated;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 393px) {
   .pc-background {
     background: var(--surface);
   }
@@ -52,7 +50,19 @@
   .mobile-frame {
     max-width: none;
     max-height: none;
+    height: 100vh;
     border-radius: 0;
     box-shadow: none;
   }
+}
+
+.pc-background:has(.onboarding),
+.mobile-frame:has(.onboarding) {
+  height: 100svh;
+}
+
+.mobile-content:has(.onboarding) {
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
