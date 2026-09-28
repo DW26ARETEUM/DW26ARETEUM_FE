@@ -674,7 +674,7 @@ function BoothAllPage() {
         <button
           className="booth-timeline-button"
           type="button"
-          onClick={() => navigate("/timetable")}
+          onClick={() => navigate("/performance/timetable")}
         >
           전체 타임라인 보기
         </button>
