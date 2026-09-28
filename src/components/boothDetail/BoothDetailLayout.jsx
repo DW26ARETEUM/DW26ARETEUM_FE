@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/BoothDetailLayout.css";
-import background from "../../assets/images/background/home.png";
+import background from "../../assets/images/background/boothDetailBackground.png";
 import popup from "../../assets/images/boothDetail.png";
 import backButton from "../../assets/images/backbtn.svg";
 import homeButton from "../../assets/images/homebtn.svg";
