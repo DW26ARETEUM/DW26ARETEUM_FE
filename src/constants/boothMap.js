@@ -1,4 +1,4 @@
-import boothDefault from "../assets/images/boothMap/boothDefalut.png";
+import boothDefault from "../assets/images/boothMap/boothDefault.png";
 import foodDefault from "../assets/images/boothMap/foodDefault.png";
 import generalBoothSelected from "../assets/images/boothMap/generalBoothSelected.png";
 import somCollectionSelected from "../assets/images/boothMap/somCollectionSelected.png";
