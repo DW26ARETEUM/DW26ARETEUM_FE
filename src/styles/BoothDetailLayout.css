@@ -56,6 +56,9 @@
   justify-content: center;
   width: 100%;
   height: calc(var(--u) * 46);
+  margin: 0;
+  padding: 0;
+  overflow: visible;
 }
 
 .booth-detail__title {
