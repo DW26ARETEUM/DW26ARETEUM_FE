@@ -16,7 +16,7 @@ import {
   fetchMessages,
   searchMessages,
 } from "../api/somtalk.js";
-import { SOMTALK_TABS } from "../constants/somtalk.js";
+import { SOMTALK_EMPTY_TEXT, SOMTALK_TABS } from "../constants/somtalk.js";
 
 export default function SomTalk() {
   const navigate = useNavigate();
@@ -25,25 +25,30 @@ export default function SomTalk() {
   const [keyword, setKeyword] = useState(""); // 검색창에 입력 중인 글자
   const [searchKeyword, setSearchKeyword] = useState(""); // 실제 검색한 단어
   const [messages, setMessages] = useState(null);
+  const [hasLoadError, setHasLoadError] = useState(false);
   const [reloadCount, setReloadCount] = useState(0);
   const [isWriting, setIsWriting] = useState(false);
 
   // 탭, 검색어, 새로고침이 바뀌면 목록 다시 불러오기
   useEffect(() => {
-    let ignore = false;
+    // 탭을 빨리 바꾸면 이전 요청은 취소
+    const controller = new AbortController();
 
     const request = searchKeyword
-      ? searchMessages(selectedTab, searchKeyword)
-      : fetchMessages(selectedTab);
+      ? searchMessages(selectedTab, searchKeyword, controller.signal)
+      : fetchMessages(selectedTab, controller.signal);
 
-    request.then((data) => {
-      if (!ignore) setMessages(data);
-    });
+    request
+      .then((data) => {
+        setMessages(data);
+        setHasLoadError(false);
+      })
+      .catch((error) => {
+        if (error.name === "AbortError") return;
+        setHasLoadError(true);
+      });
 
-    // 응답이 늦게 와서 다른 결과가 덮어쓰는 것 방지
-    return () => {
-      ignore = true;
-    };
+    return () => controller.abort();
   }, [selectedTab, searchKeyword, reloadCount]);
 
   // 일반 목록은 최신(맨 아래), 검색 결과는 맨 위부터
@@ -74,7 +79,28 @@ export default function SomTalk() {
   const handleWriteSubmit = async (newMessage) => {
     await createMessage(newMessage);
     setIsWriting(false);
+    // TODO(SSE): SSE 연결 후에는 새로고침 대신 실시간으로 추가
     setReloadCount((count) => count + 1);
+  };
+
+  const renderMessages = () => {
+    if (hasLoadError) {
+      const { title, description } = SOMTALK_EMPTY_TEXT.error;
+
+      return (
+        <div className="somtalk-empty">
+          <p className="somtalk-empty__face" aria-hidden="true">
+            (π_π)
+          </p>
+          <p className="somtalk-empty__title">{title}</p>
+          <p className="somtalk-empty__description">{description}</p>
+        </div>
+      );
+    }
+
+    if (!messages) return null;
+
+    return <SomTalkMessageList messages={messages} keyword={searchKeyword} />;
   };
 
   return (
@@ -156,9 +182,7 @@ export default function SomTalk() {
           className="somtalk-page__messages"
           aria-label="메시지 목록"
         >
-          {messages && (
-            <SomTalkMessageList messages={messages} keyword={searchKeyword} />
-          )}
+          {renderMessages()}
         </section>
 
         {/* 피그마 기준 검색 결과 화면에서는 입력창 숨김 */}

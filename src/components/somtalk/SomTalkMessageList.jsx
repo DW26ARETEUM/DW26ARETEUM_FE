@@ -21,8 +21,10 @@ const formatTime = (value) => {
   return `${pad(hour12)}:${pad(date.getMinutes())} ${hours < 12 ? "AM" : "PM"}`;
 };
 
+// 검색어에 들어간 특수문자(. * ? 등)를 글자 그대로 찾도록 처리
 const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+// 검색어 부분만 분홍색으로
 const highlight = (content, keyword) => {
   if (!keyword) return content;
 
@@ -60,7 +62,6 @@ export default function SomTalkMessageList({ messages, keyword }) {
   return (
     <>
       {keyword && (
-        // TODO(API): 페이지 단위로 받게 되면 전체 개수는 백엔드 값 사용
         <p className="somtalk-messages__result">
           ‘{keyword}’ 검색 결과 {messages.length}건
         </p>
@@ -68,17 +69,19 @@ export default function SomTalkMessageList({ messages, keyword }) {
 
       <ol
         className="somtalk-messages"
+        // 작은 SVG는 따옴표가 든 data URL로 바뀌어서 큰따옴표로 감싸야 함
         style={{ "--bubble-image": `url("${bubbleImage}")` }}
       >
         {messages.map((message, index) => {
           const date = formatDate(message.createdAt);
+          // 검색 결과에서는 날짜 줄 숨김
           const isNewDate =
             !keyword &&
             (index === 0 || date !== formatDate(messages[index - 1].createdAt));
           const isMine = message.clientId === myClientId;
 
           return (
-            <li key={message.id} className="somtalk-messages__item">
+            <li key={message.messageId} className="somtalk-messages__item">
               {isNewDate && <p className="somtalk-messages__date">{date}</p>}
 
               <div
