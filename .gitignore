@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.tmp-booth-ocr/
+.tmp-booth-xlsx/
+outputs/

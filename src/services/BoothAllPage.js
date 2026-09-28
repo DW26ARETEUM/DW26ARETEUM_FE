@@ -1,4 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.DEV
+  ? "/backend-api"
+  : import.meta.env.VITE_API_BASE_URL;
 
 /**
  * 부스 목록 조회
@@ -10,12 +12,14 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
  * @param {string|null} params.category
  * @param {string|null} params.keyword
  * @param {number[]|null} params.ids
+ * @param {AbortSignal|null} params.signal
  */
 export async function getBooths({
   date,
   category = null,
   keyword = null,
   ids = null,
+  signal = null,
 }) {
   const params = new URLSearchParams();
 
@@ -39,12 +43,31 @@ export async function getBooths({
 
   const response = await fetch(
     `${API_BASE_URL}/api/v1/booths?${params.toString()}`,
+    { signal },
   );
 
   const result = await response.json();
 
   if (!response.ok || !result.success) {
     throw new Error(result.message || "부스 목록을 불러오지 못했습니다.");
+  }
+
+  return result.data;
+}
+
+/**
+ * 부스 상세 조회
+ *
+ * GET /api/v1/booths/{boothId}
+ */
+export async function getBoothById(boothId, { signal = null } = {}) {
+  const response = await fetch(`${API_BASE_URL}/api/v1/booths/${boothId}`, {
+    signal,
+  });
+  const result = await response.json();
+
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || "부스 정보를 불러오지 못했습니다.");
   }
 
   return result.data;
