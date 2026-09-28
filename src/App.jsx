@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import "./styles/App.css";
@@ -18,38 +19,38 @@ import SomTalk from "./pages/SomTalk.jsx";
 import Credits from "./pages/Credits.jsx";
 import Onboarding from "./pages/Onboarding.jsx";
 
-// 최초 방문 시 온보딩으로 이동시켜주는 보호 컴포넌트
-function InitialRedirect({ children }) {
-  const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
+function App() {
+  const [onboardingCompleted, setOnboardingCompleted] = useState(
+    () => sessionStorage.getItem("areteumOnboardingCompleted") === "true",
+  );
 
-  // 온보딩을 본 적이 없다면 /onboarding 으로 이동
-  if (!hasSeenOnboarding) {
-    return <Navigate to="/onboarding" replace />;
+  function handleOnboardingComplete() {
+    sessionStorage.setItem("areteumOnboardingCompleted", "true");
+    setOnboardingCompleted(true);
   }
 
-  // 본 적이 있다면 원래 컴포넌트(Home) 보이기
-  return children;
-}
-
-function App() {
   return (
     <div className="pc-background">
       <div className="mobile-frame">
         <div className="mobile-content">
           <div className="app-content">
             <Routes>
-              {/* 홈 (처음 접속할 때만 /onboarding으로 보냄) */}
               <Route
                 path="/"
                 element={
-                  <InitialRedirect>
+                  onboardingCompleted ? (
                     <Home />
-                  </InitialRedirect>
+                  ) : (
+                    <Navigate to="/onboarding" replace />
+                  )
                 }
               />
 
               {/* 온보딩 페이지 */}
-              <Route path="/onboarding" element={<Onboarding />} />
+              <Route
+                path="/onboarding"
+                element={<Onboarding onComplete={handleOnboardingComplete} />}
+              />
 
               {/* 부스 소개 메인 */}
               <Route path="/booths" element={<BoothAllPage />} />
