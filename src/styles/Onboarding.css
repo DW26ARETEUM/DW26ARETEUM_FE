@@ -35,7 +35,7 @@
   z-index: 1;
   top: 34%;
   left: 50%;
-  width: 72%;
+  width: min(72%, 35dvh);
   max-width: 300px;
   height: auto;
   transform: translateX(-50%);
@@ -65,11 +65,11 @@
 .onboarding-arcade {
   position: absolute;
   z-index: 2;
-  right: 0;
+  left: 50%;
   bottom: 0;
-  left: 0;
-  width: 100%;
+  width: min(100%, 46.2dvh);
   line-height: 0;
+  transform: translateX(-50%);
 }
 
 .onboarding-arcade-image {
