@@ -254,7 +254,7 @@ function CreditsMates() {
         </a>
         <a
           className="credits-team__button credits-team__button--dongduk"
-          href="https://www.instagram.com/likelion_dongduk/"
+          href="https://www.instagram.com/dongduk_likelion/"
           target="_blank"
           rel="noreferrer"
         >
