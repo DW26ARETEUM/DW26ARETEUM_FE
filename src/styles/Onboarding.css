@@ -12,17 +12,18 @@
 
 .onboarding-sky {
   position: absolute;
-  inset: 0 0 auto;
-  height: 36%;
+  inset: 0;
+  height: 100%;
   z-index: 3;
   pointer-events: none;
 }
 
 .onboarding-tagline {
   position: absolute;
-  top: 28%;
+  top: 5.5%;
   left: 0;
   width: 100%;
+  margin: 0;
   color: #536a69;
   font-family: "GalmuriMono11", monospace;
   font-size: clamp(10px, 3.1cqw, 13px);
@@ -33,9 +34,9 @@
 .onboarding-title {
   position: absolute;
   z-index: 1;
-  top: 34%;
+  top: 8%;
   left: 50%;
-  width: min(72%, 34cqh, 300px);
+  width: min(72%, 32cqh, 300px);
   max-width: 300px;
   height: auto;
   transform: translateX(-50%);
@@ -51,13 +52,13 @@
 }
 
 .fireworks-left {
-  top: 27%;
+  top: 4.5%;
   left: -11%;
   width: 31%;
 }
 
 .fireworks-right {
-  top: 58%;
+  top: 18%;
   right: -12%;
   width: 32%;
 }
@@ -67,7 +68,7 @@
   z-index: 2;
   left: 50%;
   bottom: 0;
-  width: min(100%, 46.5cqh);
+  width: min(100%, 56cqh);
   line-height: 0;
   transform: translateX(-50%);
 }
