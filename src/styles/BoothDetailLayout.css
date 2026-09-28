@@ -302,28 +302,35 @@
   width: calc(var(--u) * 260);
   height: calc(var(--u) * 353);
   margin-top: calc(var(--u) * 22);
-  padding: calc(var(--u) * 13) calc(var(--u) * 7) calc(var(--u) * 13)
-    calc(var(--u) * 13);
   overflow: hidden;
   border: 0.5px solid var(--booth-card-border);
   border-radius: calc(var(--u) * 10);
   background: var(--booth-card-bg);
 }
 
-.booth-detail-panel--scrollable {
-  height: calc(var(--u) * 378);
-  padding: 0;
-}
-
 .booth-detail-panel__scroll {
   position: absolute;
   inset: calc(var(--u) * 11) calc(var(--u) * 6) calc(var(--u) * 11)
-    calc(var(--u) * 14);
-  padding: calc(var(--u) * 8) calc(var(--u) * 12) calc(var(--u) * 8) 0;
+    calc(var(--u) * 13);
+  padding: calc(var(--u) * 2) calc(var(--u) * 1) calc(var(--u) * 2) 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: var(--booth-scroll-thumb) var(--booth-scroll-track);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .booth-detail-panel__scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--booth-scroll-thumb) var(--booth-scroll-track);
+  }
+}
+
+.booth-detail-panel--scrollable {
+  height: calc(var(--u) * 378);
+}
+
+.booth-detail-panel--scrollable .booth-detail-panel__scroll {
+  left: calc(var(--u) * 14);
+  padding: calc(var(--u) * 8) calc(var(--u) * 12) calc(var(--u) * 8) 0;
 }
 
 .booth-detail-panel__scroll::-webkit-scrollbar {
