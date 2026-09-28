@@ -95,9 +95,9 @@ export default function Onboarding() {
   });
 
   useEffect(() => {
-    if (storyStep === 1) {
+    if (storyStep === 1 || storyStep === 2) {
       const timeout = window.setTimeout(
-        () => setStoryStep(2),
+        () => setStoryStep(storyStep + 1),
         transformationDuration,
       );
       return () => window.clearTimeout(timeout);
@@ -205,12 +205,12 @@ export default function Onboarding() {
 
       {activeStory ? (
         <section
-          className={`onboarding-dialog${storyStep === story.length - 1 ? " onboarding-dialog--final" : ""}`}
+          className={`onboarding-dialog${storyStep === 2 ? " onboarding-dialog--evolution" : ""}${storyStep === story.length - 1 ? " onboarding-dialog--final" : ""}`}
           aria-live="polite"
         >
           <img className="onboarding-dialog-frame" src={chatFrame} alt="" />
           <p className="onboarding-dialog-text">{activeStory.text}</p>
-          {!activeStory.effect && (
+          {!activeStory.effect && storyStep !== 2 && (
             <button
               className="onboarding-next"
               type="button"
