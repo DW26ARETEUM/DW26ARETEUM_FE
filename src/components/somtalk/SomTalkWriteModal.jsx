@@ -5,6 +5,7 @@ import defaultButton from "../../assets/images/defaultBtn.png";
 import selectedButton from "../../assets/images/selectedBtn.png";
 import { MAX_MESSAGE_LENGTH, SOMTALK_TABS } from "../../constants/somtalk.js";
 
+// 글쓰기에서는 "전체" 제외
 const CATEGORIES = SOMTALK_TABS.filter(({ value }) => value !== "all");
 
 export default function SomTalkWriteModal({ onClose, onSubmit }) {
@@ -15,10 +16,12 @@ export default function SomTalkWriteModal({ onClose, onSubmit }) {
 
   const canSubmit = Boolean(category && content.trim()) && !isSubmitting;
 
+  // 열리면 바로 입력할 수 있게
   useEffect(() => {
     textareaRef.current?.focus();
   }, []);
 
+  // ESC 키로 닫기
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") onClose();
@@ -28,6 +31,7 @@ export default function SomTalkWriteModal({ onClose, onSubmit }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
+  // 한글 조합 중에 maxLength를 넘는 경우 대비해서 한 번 더 자르기
   const handleChange = (event) => {
     setContent(event.target.value.slice(0, MAX_MESSAGE_LENGTH));
   };
@@ -40,9 +44,10 @@ export default function SomTalkWriteModal({ onClose, onSubmit }) {
 
     try {
       await onSubmit({ category, content: content.trim() });
-    } catch {
-      // TODO(API): 실패 안내 문구 기디분과 정하기
-      alert("등록에 실패했어요. 다시 시도해주세요.");
+    } catch (error) {
+      // 서버가 보낸 이유(예: 메시지는 53자를 초과할 수 없습니다.)가 있으면 그대로 보여주기
+      // TODO(기디): 실패 안내 문구/방식 확정되면 수정
+      alert(error.message || "등록에 실패했어요. 다시 시도해주세요.");
       setIsSubmitting(false);
     }
   };
