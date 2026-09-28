@@ -19,7 +19,7 @@ import whiteButton from "../assets/images/onboarding/whtieBtn.png";
 
 const story = [
   {
-    text: "앗...! 야생의 솜솜이(가) 나타났다!",
+    text: "앗...! 야생의 솜솜이 (이)가 나타났다!",
     character: defaultSom,
     effect: false,
   },
@@ -27,6 +27,11 @@ const story = [
     text: "…… 오잉!? 솜솜이의 상태가 …… !!",
     character: defaultSom,
     effect: true,
+  },
+  {
+    text: "솜솜이 (이)가\n[ 축제솜 ] (으)로 진화했다 … !!",
+    character: transformedSom,
+    effect: false,
   },
   {
     text: "[다음으로] 버튼을 눌러 축제솜을\n우리의 축제로 데려가주세요!!",
@@ -90,9 +95,9 @@ export default function Onboarding() {
   });
 
   useEffect(() => {
-    if (storyStep === 1) {
+    if (storyStep === 1 || storyStep === 2) {
       const timeout = window.setTimeout(
-        () => setStoryStep(2),
+        () => setStoryStep(storyStep + 1),
         transformationDuration,
       );
       return () => window.clearTimeout(timeout);
@@ -200,12 +205,12 @@ export default function Onboarding() {
 
       {activeStory ? (
         <section
-          className={`onboarding-dialog${storyStep === story.length - 1 ? " onboarding-dialog--final" : ""}`}
+          className={`onboarding-dialog${storyStep === 2 ? " onboarding-dialog--evolution" : ""}${storyStep === story.length - 1 ? " onboarding-dialog--final" : ""}`}
           aria-live="polite"
         >
           <img className="onboarding-dialog-frame" src={chatFrame} alt="" />
           <p className="onboarding-dialog-text">{activeStory.text}</p>
-          {!activeStory.effect && (
+          {!activeStory.effect && storyStep !== 2 && (
             <button
               className="onboarding-next"
               type="button"
