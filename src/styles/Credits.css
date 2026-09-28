@@ -169,6 +169,31 @@
   text-decoration: none;
   cursor: pointer;
 }
+.credits-team__button--image {
+  position: relative;
+  width: min(100%, calc(var(--u) * 210));
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.credits-team__button--image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.credits-team__button--image span {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #25151d;
+  font: inherit;
+  font-size: calc(var(--u) * 13);
+}
 .credits-panel--committee .credits-team__button {
   margin-top: calc(var(--u) * 24);
 }
@@ -181,30 +206,7 @@
   margin-top: calc(var(--u) * 34);
 }
 .credits-panel--mates .credits-team__button {
-  position: relative;
-  width: min(100%, calc(var(--u) * 210));
-  min-height: 0;
   margin: 0 auto;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-.credits-panel--mates .credits-team__button img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-.credits-panel--mates .credits-team__button span {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #25151d;
-  font: inherit;
-  font-size: calc(var(--u) * 13);
 }
 .credits-photo-frame {
   position: relative;

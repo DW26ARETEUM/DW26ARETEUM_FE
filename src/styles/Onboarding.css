@@ -283,26 +283,24 @@
 .onboarding-dialog {
   position: absolute;
   z-index: 4;
-  right: 10%;
+  left: 50%;
   bottom: 4.5%;
-  left: 10%;
+  width: min(80%, 360px);
   min-height: 96px;
   aspect-ratio: 2.9 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 10px 15px 22px;
+  transform: translateX(-50%);
 }
 
 .onboarding-dialog--final {
-  right: auto;
-  left: 50%;
-  width: 84%;
+  width: min(84%, 360px);
   height: 128px;
   min-height: 0;
   aspect-ratio: auto;
   padding: 0;
-  transform: translateX(-50%);
 }
 
 .onboarding-dialog-frame {
