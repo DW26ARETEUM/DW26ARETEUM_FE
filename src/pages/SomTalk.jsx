@@ -12,11 +12,26 @@ import messageBox from "../assets/images/messageBtn.png";
 import SomTalkMessageList from "../components/somtalk/SomTalkMessageList.jsx";
 import SomTalkWriteModal from "../components/somtalk/SomTalkWriteModal.jsx";
 import {
+  CHAT_MESSAGE_EVENT,
+  CHAT_STREAM_URL,
+  SOMTALK_PAGE_SIZE,
   createMessage,
   fetchMessages,
+  fetchNewerMessages,
   searchMessages,
 } from "../api/somtalk.js";
 import { SOMTALK_EMPTY_TEXT, SOMTALK_TABS } from "../constants/somtalk.js";
+import { getClientId } from "../utils/clientId.js";
+
+// 맨 아래에서 이 정도(px) 안쪽이면 "맨 아래 보는 중"으로 판단
+const BOTTOM_THRESHOLD = 80;
+
+// 지금까지 받은 메시지 중 가장 큰 messageId 기억 (SSE 재연결 복구 기준)
+const rememberLastId = (lastIdRef, list) => {
+  list.forEach(({ messageId }) => {
+    if (messageId > (lastIdRef.current ?? 0)) lastIdRef.current = messageId;
+  });
+};
 
 export default function SomTalk() {
   const navigate = useNavigate();
@@ -29,6 +44,17 @@ export default function SomTalk() {
   const [reloadCount, setReloadCount] = useState(0);
   const [isWriting, setIsWriting] = useState(false);
 
+  // SSE 이벤트 안에서 "지금 보는 탭/검색어"를 알기 위한 값
+  const viewRef = useRef({ tab: "all", keyword: "" });
+  // 가장 최근에 받은 messageId
+  const lastMessageIdRef = useRef(null);
+  // 목록이 바뀐 뒤 맨 아래로 내릴지 여부
+  const stickToBottomRef = useRef(true);
+
+  useEffect(() => {
+    viewRef.current = { tab: selectedTab, keyword: searchKeyword };
+  }, [selectedTab, searchKeyword]);
+
   // 탭, 검색어, 새로고침이 바뀌면 목록 다시 불러오기
   useEffect(() => {
     // 탭을 빨리 바꾸면 이전 요청은 취소
@@ -40,6 +66,8 @@ export default function SomTalk() {
 
     request
       .then((data) => {
+        if (!searchKeyword) rememberLastId(lastMessageIdRef, data);
+        stickToBottomRef.current = true;
         setMessages(data);
         setHasLoadError(false);
       })
@@ -54,8 +82,102 @@ export default function SomTalk() {
   // 일반 목록은 최신(맨 아래), 검색 결과는 맨 위부터
   useEffect(() => {
     const list = messagesRef.current;
-    if (list) list.scrollTop = searchKeyword ? 0 : list.scrollHeight;
+    if (!list) return;
+
+    if (searchKeyword) {
+      list.scrollTop = 0;
+    } else if (stickToBottomRef.current) {
+      list.scrollTop = list.scrollHeight;
+    }
   }, [messages, searchKeyword]);
+
+  // 새 메시지를 목록 맨 아래에 추가 (SSE, 재연결 복구, 내 글 등록에서 사용)
+  const appendMessages = useCallback((newMessages) => {
+    rememberLastId(lastMessageIdRef, newMessages);
+
+    const { tab, keyword: currentKeyword } = viewRef.current;
+
+    // 검색 결과 보는 중에는 섞이지 않게 추가 안 함
+    if (currentKeyword) return;
+
+    // 지금 탭에 맞는 글만
+    const visibleMessages = newMessages.filter(
+      ({ category }) => tab === "all" || category === tab,
+    );
+    if (visibleMessages.length === 0) return;
+
+    // 맨 아래 보는 중이었거나 내 글이면 새 글 따라 내려가기
+    const list = messagesRef.current;
+    const isNearBottom =
+      !list || list.scrollHeight - list.scrollTop - list.clientHeight;
+    BOTTOM_THRESHOLD;
+    const hasMyMessage = visibleMessages.some(
+      ({ clientId }) => clientId === getClientId(),
+    );
+    stickToBottomRef.current = isNearBottom || hasMyMessage;
+
+    setMessages((prev) => {
+      if (!prev) return prev;
+
+      // 같은 messageId는 한 번만 (등록 응답 + SSE로 두 번 올 수 있음)
+      const savedIds = new Set(prev.map(({ messageId }) => messageId));
+      const added = visibleMessages.filter(
+        ({ messageId }) => !savedIds.has(messageId),
+      );
+
+      return added.length > 0 ? [...prev, ...added] : prev;
+    });
+  }, []);
+
+  // SSE 재연결 후 끊긴 동안 놓친 메시지 불러오기
+  const recoverMissedMessages = useCallback(async () => {
+    try {
+      // limit보다 많이 놓쳤으면 after를 갱신해서 이어서 조회
+      for (let after = lastMessageIdRef.current; after;) {
+        const missed = await fetchNewerMessages("all", after);
+        appendMessages(missed);
+
+        after =
+          missed.length === SOMTALK_PAGE_SIZE
+            ? missed[missed.length - 1].messageId
+            : null;
+      }
+    } catch {
+      // 실패하면 다음 재연결이나 새로고침 때 다시 받아옴
+    }
+  }, [appendMessages]);
+
+  // SSE 연결: 화면 들어오면 연결, 나가면 끊기
+  useEffect(() => {
+    const eventSource = new EventSource(CHAT_STREAM_URL);
+    let wasDisconnected = false;
+
+    const handleMessage = (event) => {
+      try {
+        appendMessages([JSON.parse(event.data)]);
+      } catch {
+        // 형식이 잘못된 데이터는 무시
+      }
+    };
+
+    // 끊기면 EventSource가 알아서 재연결함
+    const handleError = () => {
+      wasDisconnected = true;
+    };
+
+    // 재연결되면 놓친 메시지 복구
+    const handleOpen = () => {
+      if (!wasDisconnected) return;
+      wasDisconnected = false;
+      recoverMissedMessages();
+    };
+
+    eventSource.addEventListener(CHAT_MESSAGE_EVENT, handleMessage);
+    eventSource.addEventListener("error", handleError);
+    eventSource.addEventListener("open", handleOpen);
+
+    return () => eventSource.close();
+  }, [appendMessages, recoverMissedMessages]);
 
   const handleRefresh = () => {
     setReloadCount((count) => count + 1);
@@ -76,11 +198,11 @@ export default function SomTalk() {
 
   const closeWriteModal = useCallback(() => setIsWriting(false), []);
 
+  // 등록 응답으로 받은 내 글을 바로 추가 (SSE로 또 와도 중복 제거됨)
   const handleWriteSubmit = async (newMessage) => {
-    await createMessage(newMessage);
+    const savedMessage = await createMessage(newMessage);
     setIsWriting(false);
-    // TODO(SSE): SSE 연결 후에는 새로고침 대신 실시간으로 추가
-    setReloadCount((count) => count + 1);
+    appendMessages([savedMessage]);
   };
 
   const renderMessages = () => {

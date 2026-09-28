@@ -7,10 +7,15 @@ const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? "")
   .replace(/\/+$/, "");
 
 const CHAT_URL = `${API_BASE_URL}/api/v1/chat`;
-const PAGE_SIZE = 50;
+
+// 한 번에 불러오는 메시지 개수 (명세서 기본값)
+export const SOMTALK_PAGE_SIZE = 50;
 
 // SSE 실시간 수신 주소
 export const CHAT_STREAM_URL = `${CHAT_URL}/stream`;
+
+// SSE 새 메시지 이벤트 이름
+export const CHAT_MESSAGE_EVENT = "chat-message-created";
 
 // 공통 응답에서 data만 꺼내고, 실패하면 에러 던지기 (boothApi.js와 같은 방식)
 async function request(url, options) {
@@ -36,7 +41,7 @@ async function request(url, options) {
 
 // 쿼리 만들기 ("전체" 탭이면 category를 아예 안 보냄)
 const buildQuery = ({ category, ...params }) => {
-  const query = new URLSearchParams({ limit: PAGE_SIZE, ...params });
+  const query = new URLSearchParams({ limit: SOMTALK_PAGE_SIZE, ...params });
   if (category && category !== "all") query.set("category", category);
   return query.toString();
 };
